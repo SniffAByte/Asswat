@@ -20,11 +20,6 @@ import Navbar from "./Navbar.vue";
 export default {
   components: {
     Navbar
-  },
-  watch: {
-    $route(to, from) {
-      this.$route.push(to);
-    }
   }
 };
 </script>

@@ -41,3 +41,13 @@
 <style lang="scss" scoped>
 @import "@/sass/auth.scss";
 </style>
+
+<script>
+export default {
+  head: {
+    title: {
+      inner: "Create an account"
+    }
+  }
+};
+</script>

@@ -30,3 +30,13 @@
 <style lang="scss" scoped>
 @import "@/sass/auth.scss";
 </style>
+
+<script>
+export default {
+  head: {
+    title: {
+      inner: "Login to your account"
+    }
+  }
+};
+</script>
