@@ -1,0 +1,40 @@
+.intro {
+  background: linear-gradient(to left, #248da8, #196579);
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  h2 {
+    font-family: monoton;
+    cursor: pointer;
+  }
+}
+.login {
+  background: #fdfef1;
+  font-family: Cairo;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  form {
+    width: 100%;
+    max-width: 350px;
+    span {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .form-group,
+    .form-row {
+      margin-bottom: 7px;
+    }
+    a {
+      color: #999;
+    }
+  }
+}

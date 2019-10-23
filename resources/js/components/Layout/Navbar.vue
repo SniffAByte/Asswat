@@ -28,7 +28,7 @@
             <a class="nav-link" href="#">Stats</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#">Login</router-link>
+            <router-link class="nav-link" :to="{ name: 'auth.login' }">Login</router-link>
           </li>
         </ul>
       </div>

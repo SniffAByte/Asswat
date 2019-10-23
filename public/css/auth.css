@@ -1,0 +1,58 @@
+.intro {
+  background: -webkit-gradient(linear, right top, left top, from(#248da8), to(#196579));
+  background: linear-gradient(to left, #248da8, #196579);
+  color: #fff;
+  height: 100vh;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  text-align: center;
+}
+
+.intro h2 {
+  font-family: monoton;
+  cursor: pointer;
+}
+
+.login {
+  background: #fdfef1;
+  font-family: Cairo;
+  height: 100vh;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  text-align: center;
+}
+
+.login form {
+  width: 100%;
+  max-width: 350px;
+}
+
+.login form span {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.login form .form-group,
+.login form .form-row {
+  margin-bottom: 7px;
+}
+
+.login form a {
+  color: #999;
+}
+
