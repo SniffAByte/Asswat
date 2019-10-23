@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" :class="{'fixed-top': fixedTop}">
     <div class="container">
-      <a class="navbar-brand" href="#">Asswat</a>
+      <router-link class="navbar-brand" :to="{ name: 'index' }">Asswat</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse navbar-default" id="myNavbar">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <router-link class="nav-link" to="#">
+            <router-link class="nav-link" :to="{ name: 'index' }">
               Home
               <span class="sr-only">(current)</span>
             </router-link>
