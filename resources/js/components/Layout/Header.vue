@@ -48,6 +48,7 @@ header {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     cursor: pointer;
+    display: none;
     @keyframes upndown {
       from {
         transform: translateY(0);

@@ -4,9 +4,12 @@
       <div class="col-md-6 intro">
         <router-link :to="{ name: 'index' }" tag="h2">Asswat</router-link>
         <p class="lead">Say whatever you want safely and honestly</p>
+        <router-link id="scroll-down" to="#form" refresh class="d-md-none">
+          <i class="fa fa-sort-down"></i>
+        </router-link>
       </div>
       <div class="col-md-6 login">
-        <form action="#" method="POST">
+        <form action="#" method="POST" id="form">
           <span>Sign in</span>
           <div class="form-group">
             <input type="email" class="form-control" placeholder="Your email" />

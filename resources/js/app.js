@@ -1,6 +1,8 @@
 import { router } from './router/router';
 import Btn from './components/Btn.vue';
 import VueHead from 'vue-head';
+import VueResource from 'vue-resource';
+import { store } from './Store/Store';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -29,9 +31,14 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.use(VueResource);
+Vue.http.options.root = 'http://api.aswat.test/api';
+
+
 Vue.component('Btn', Btn);
 Vue.use(VueHead);
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store
 });

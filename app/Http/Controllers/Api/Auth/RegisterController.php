@@ -25,7 +25,7 @@ class RegisterController extends Controller
         $validation = $this->validator($request->all());
 
         if ($validation->fails()) {
-            return $validation->errors();
+            return response()->json($validation->errors(), 422);
         }
 
         event(new Registered($user = $this->create($request->all())));
@@ -47,7 +47,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
