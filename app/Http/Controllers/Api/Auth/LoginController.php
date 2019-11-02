@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -54,22 +55,7 @@ class LoginController extends Controller
         if (method_exists($this, 'clearLoginAttempts')) {
             $this->clearLoginAttempts($request);
         }
-        return $this->respondWithToken($token);
-    }
-
-    /**
-     * Get the token array structure
-     * 
-     * @param  String $token
-     * @return Illuminate\Http\JsonResponse
-     */
-    public function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        return User::respondWithToken($token);
     }
 
     /**

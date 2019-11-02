@@ -57,4 +57,19 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * Get the token array structure
+     * 
+     * @param  String $token
+     * @return Illuminate\Http\JsonResponse
+     */
+    public static function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
 }
