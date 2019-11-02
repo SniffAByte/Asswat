@@ -1,6 +1,7 @@
 import Index from '../pages/Index.vue';
 import LoginPage from '../pages/auth/Login.vue';
 import RegisterPage from '../pages/auth/Register.vue';
+import Dashboard from '../pages/user/Dashboard.vue';
 
 export const routes = [
     {
@@ -17,5 +18,10 @@ export const routes = [
         path: '/auth/register',
         component: RegisterPage,
         name: 'auth.register'
+    },
+    {
+        path: '/messages',
+        component: Dashboard,
+        name: 'user.dashboard'
     }
 ];

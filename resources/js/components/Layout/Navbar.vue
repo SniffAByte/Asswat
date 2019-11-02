@@ -14,7 +14,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse navbar-default" id="myNavbar">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto" v-if="!authenticated">
           <li class="nav-item active">
             <router-link class="nav-link" :to="{ name: 'index' }">
               Home
@@ -29,6 +29,17 @@
           </li>
           <li class="nav-item">
             <router-link class="nav-link" :to="{ name: 'auth.login' }">Login</router-link>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto" v-else>
+          <li class="nav-item active">
+            <router-link class="nav-link" :to="{}">Messages</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{}">Settings</router-link>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" @click.prevent="logout" href="#">Logout</a>
           </li>
         </ul>
       </div>
@@ -64,6 +75,7 @@ nav {
 </style>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -74,6 +86,7 @@ export default {
     fixedTop() {
       return this.scrolled > 200;
     }
-  }
+  },
+  methods: mapActions("Auth", ["logout"])
 };
 </script>
