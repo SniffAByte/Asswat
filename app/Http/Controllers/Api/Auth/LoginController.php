@@ -11,6 +11,12 @@ class LoginController extends Controller
 {
     use ThrottlesLogins;
 
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['only' => ['me', 'logout', 'refresh']]);
+        $this->middleware('guest', ['except' => ['me', 'logout', 'refresh']]);
+    }
+
     /**
      * Handle a login request to the application
      * 
@@ -98,5 +104,36 @@ class LoginController extends Controller
     public function username()
     {
         return 'email';
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return User::respondWithToken(auth()->refresh());
     }
 }

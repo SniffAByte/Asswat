@@ -14,6 +14,13 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['prefix' => 'auth'], function () {
+    Route::get('me', 'Api\Auth\LoginController@me');
     Route::post('login', 'Api\Auth\LoginController@login')->name('auth.login');
+    Route::post('logout', 'Api\Auth\LoginController@logout');
+    Route::post('refresh', 'Api\Auth\LoginController@refresh');
     Route::post('register', 'Api\Auth\RegisterController@register')->name('auth.register');
+});
+
+Route::fallback(function () {
+    abort(404);
 });
