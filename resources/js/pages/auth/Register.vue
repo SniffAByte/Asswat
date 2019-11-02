@@ -9,7 +9,7 @@
         </router-link>
       </div>
       <div class="col-md-6 login" id="form">
-        <form action="#" method="POST" @submit.prevent="register">
+        <form action="#" method="POST" @submit.prevent="Register">
           <span>Sign up</span>
           <div class="form-row">
             <div class="col">
@@ -79,7 +79,7 @@ export default {
     };
   },
   methods: {
-    register() {
+    Register() {
       this.$store.dispatch("Auth/register", {
         name: this.user.fname + " " + this.user.lname,
         email: this.user.email,

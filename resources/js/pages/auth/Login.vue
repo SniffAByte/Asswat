@@ -9,13 +9,26 @@
         </router-link>
       </div>
       <div class="col-md-6 login">
-        <form action="#" method="POST" id="form">
+        <form action="#" method="POST" id="form" @submit.prevent="signin">
           <span>Sign in</span>
+          <p class="alert alert-danger" v-if="error">{{ error.email }}</p>
           <div class="form-group">
-            <input type="email" class="form-control" placeholder="Your email" />
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Your email"
+              v-model="user.email"
+              required
+            />
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" placeholder="Your password" />
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Your password"
+              v-model="user.password"
+              required
+            />
           </div>
           <Btn>Login</Btn>
           <hr />
@@ -39,6 +52,24 @@ export default {
   head: {
     title: {
       inner: "Login to your account"
+    }
+  },
+  data() {
+    return {
+      user: {
+        email: "",
+        password: ""
+      }
+    };
+  },
+  computed: {
+    error() {
+      return this.$store.state.Auth.error;
+    }
+  },
+  methods: {
+    signin() {
+      this.$store.dispatch("Auth/login", this.user);
     }
   }
 };

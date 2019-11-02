@@ -540,10 +540,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   head: {
     title: {
       inner: "Login to your account"
+    }
+  },
+  data: function data() {
+    return {
+      user: {
+        email: "",
+        password: ""
+      }
+    };
+  },
+  computed: {
+    error: function error() {
+      return this.$store.state.Auth.error;
+    }
+  },
+  methods: {
+    signin: function signin() {
+      this.$store.dispatch("Auth/login", this.user);
     }
   }
 });
@@ -639,7 +670,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    register: function register() {
+    Register: function Register() {
       this.$store.dispatch("Auth/register", {
         name: this.user.fname + " " + this.user.lname,
         email: this.user.email,
@@ -21216,13 +21247,79 @@ var render = function() {
       _c("div", { staticClass: "col-md-6 login" }, [
         _c(
           "form",
-          { attrs: { action: "#", method: "POST", id: "form" } },
+          {
+            attrs: { action: "#", method: "POST", id: "form" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.signin($event)
+              }
+            }
+          },
           [
             _c("span", [_vm._v("Sign in")]),
             _vm._v(" "),
-            _vm._m(0),
+            _vm.error
+              ? _c("p", { staticClass: "alert alert-danger" }, [
+                  _vm._v(_vm._s(_vm.error.email))
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _vm._m(1),
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.user.email,
+                    expression: "user.email"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "email",
+                  placeholder: "Your email",
+                  required: ""
+                },
+                domProps: { value: _vm.user.email },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.user, "email", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.user.password,
+                    expression: "user.password"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "password",
+                  placeholder: "Your password",
+                  required: ""
+                },
+                domProps: { value: _vm.user.password },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.user, "password", $event.target.value)
+                  }
+                }
+              })
+            ]),
             _vm._v(" "),
             _c("Btn", [_vm._v("Login")]),
             _vm._v(" "),
@@ -21258,30 +21355,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "email", placeholder: "Your email" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "password", placeholder: "Your password" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -21337,7 +21411,7 @@ var render = function() {
             on: {
               submit: function($event) {
                 $event.preventDefault()
-                return _vm.register($event)
+                return _vm.Register($event)
               }
             }
           },
@@ -39120,12 +39194,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var Auth = {
   namespaced: true,
   state: {
-    access_token: ''
+    access_token: null,
+    error: null
   },
   getters: {},
   mutations: {
     auth: function auth(state, authenticated) {
       state.access_token = authenticated.access_token;
+    },
+    setError: function setError(state, error) {
+      state.error = error;
     }
   },
   actions: {
@@ -39164,6 +39242,42 @@ var Auth = {
       }
 
       return register;
+    }(),
+    login: function () {
+      var _login = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, payload) {
+        var commit;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                commit = _ref2.commit;
+                _context2.next = 3;
+                return vue__WEBPACK_IMPORTED_MODULE_1___default.a.http.post("auth/login", payload).then(function (response) {
+                  return response.json();
+                }).then(function (authenticated) {
+                  // Commit a mutation to store response in state
+                  commit('auth', authenticated); // Store token in localstorage
+
+                  localStorage.setItem('access_token', authenticated.access_token);
+                })["catch"](function (error) {
+                  commit('setError', error.data);
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function login(_x3, _x4) {
+        return _login.apply(this, arguments);
+      }
+
+      return login;
     }()
   }
 };
