@@ -652,6 +652,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   head: {
     title: {
@@ -668,6 +690,11 @@ __webpack_require__.r(__webpack_exports__);
         cpass: ""
       }
     };
+  },
+  computed: {
+    error: function error() {
+      return this.$store.state.Auth.error;
+    }
   },
   methods: {
     Register: function Register() {
@@ -21418,6 +21445,12 @@ var render = function() {
           [
             _c("span", [_vm._v("Sign up")]),
             _vm._v(" "),
+            _vm.error && _vm.error.name
+              ? _c("div", { staticClass: "text text-danger text-left" }, [
+                  _vm._v(_vm._s(_vm.error.name[0]))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "form-row" }, [
               _c("div", { staticClass: "col" }, [
                 _c("input", {
@@ -21430,7 +21463,11 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "text", placeholder: "First Name" },
+                  attrs: {
+                    type: "text",
+                    placeholder: "First Name",
+                    required: ""
+                  },
                   domProps: { value: _vm.user.fname },
                   on: {
                     input: function($event) {
@@ -21454,7 +21491,11 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "text", placeholder: "Last Name" },
+                  attrs: {
+                    type: "text",
+                    placeholder: "Last Name",
+                    required: ""
+                  },
                   domProps: { value: _vm.user.lname },
                   on: {
                     input: function($event) {
@@ -21468,6 +21509,12 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
+            _vm.error && _vm.error.email
+              ? _c("div", { staticClass: "text text-danger text-left" }, [
+                  _vm._v(_vm._s(_vm.error.email[0]))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("input", {
                 directives: [
@@ -21479,7 +21526,11 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "email", placeholder: "Email Address" },
+                attrs: {
+                  type: "email",
+                  placeholder: "Email Address",
+                  required: ""
+                },
                 domProps: { value: _vm.user.email },
                 on: {
                   input: function($event) {
@@ -21491,6 +21542,12 @@ var render = function() {
                 }
               })
             ]),
+            _vm._v(" "),
+            _vm.error && _vm.error.password
+              ? _c("div", { staticClass: "text text-danger text-left" }, [
+                  _vm._v(_vm._s(_vm.error.password[0]))
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "form-row" }, [
               _c("div", { staticClass: "col" }, [
@@ -21504,7 +21561,11 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "password", placeholder: "Password" },
+                  attrs: {
+                    type: "password",
+                    placeholder: "Password",
+                    required: ""
+                  },
                   domProps: { value: _vm.user.pass },
                   on: {
                     input: function($event) {
@@ -21528,7 +21589,11 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "password", placeholder: "Confirm Password" },
+                  attrs: {
+                    type: "password",
+                    placeholder: "Confirm Password",
+                    required: ""
+                  },
                   domProps: { value: _vm.user.cpass },
                   on: {
                     input: function($event) {
@@ -39225,8 +39290,8 @@ var Auth = {
                   commit('auth', authenticated); // Store token in localstorage
 
                   localStorage.setItem('access_token', authenticated.access_token);
-                })["catch"](function (err) {
-                  console.log('err', err);
+                })["catch"](function (error) {
+                  commit('setError', error.data);
                 });
 
               case 3:

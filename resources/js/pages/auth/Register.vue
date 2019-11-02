@@ -11,22 +11,42 @@
       <div class="col-md-6 login" id="form">
         <form action="#" method="POST" @submit.prevent="Register">
           <span>Sign up</span>
+          <div class="text text-danger text-left" v-if="error && error.name">{{ error.name[0] }}</div>
           <div class="form-row">
             <div class="col">
-              <input type="text" class="form-control" placeholder="First Name" v-model="user.fname" />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="First Name"
+                v-model="user.fname"
+                required
+              />
             </div>
             <div class="col">
-              <input type="text" class="form-control" placeholder="Last Name" v-model="user.lname" />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Last Name"
+                v-model="user.lname"
+                required
+              />
             </div>
           </div>
+
+          <div class="text text-danger text-left" v-if="error && error.email">{{ error.email[0] }}</div>
           <div class="form-group">
             <input
               type="email"
               class="form-control"
               placeholder="Email Address"
               v-model="user.email"
+              required
             />
           </div>
+          <div
+            class="text text-danger text-left"
+            v-if="error && error.password"
+          >{{ error.password[0] }}</div>
           <div class="form-row">
             <div class="col">
               <input
@@ -34,6 +54,7 @@
                 class="form-control"
                 placeholder="Password"
                 v-model="user.pass"
+                required
               />
             </div>
             <div class="col">
@@ -42,6 +63,7 @@
                 class="form-control"
                 placeholder="Confirm Password"
                 v-model="user.cpass"
+                required
               />
             </div>
           </div>
@@ -77,6 +99,11 @@ export default {
         cpass: ""
       }
     };
+  },
+  computed: {
+    error() {
+      return this.$store.state.Auth.error;
+    }
   },
   methods: {
     Register() {

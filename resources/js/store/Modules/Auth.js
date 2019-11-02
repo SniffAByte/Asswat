@@ -26,9 +26,9 @@ const Auth = {
 
                 // Store token in localstorage
                 localStorage.setItem('access_token', authenticated.access_token);
-            }).catch(err => {
-                console.log('err', err);
-            })
+            }).catch(error => {
+                commit('setError', error.data);
+            });
         },
         async login({ commit }, payload) {
             // Send the Request to the backend
