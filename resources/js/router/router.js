@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { routes } from './routes';
+import { store } from '../store/index.js';
 
 Vue.use(VueRouter);
 
-export const router = new VueRouter({
+const router = new VueRouter({
     mode: 'history',
     routes,
     scrollBehavior(to, from, savedPosition) {
@@ -24,3 +25,14 @@ export const router = new VueRouter({
         }
     }
 });
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+        return store.getters['Auth/authenticated'] ? next() : next({ name: 'auth.login' });
+    } else if (to.meta.requiresGuest) {
+        return store.getters['Auth/authenticated'] ? next({ name: 'user.dashboard' }) : next();
+    }
+    next();
+});
+
+export { router }

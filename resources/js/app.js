@@ -2,7 +2,7 @@ import { router } from './router/router';
 import Btn from './components/Btn.vue';
 import VueHead from 'vue-head';
 import VueResource from 'vue-resource';
-import { store } from './Store/Store';
+import { store } from './store/index';
 import { Auth } from './mixins/auth';
 
 /**

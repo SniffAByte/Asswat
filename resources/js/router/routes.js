@@ -12,16 +12,25 @@ export const routes = [
     {
         path: '/auth/login',
         component: LoginPage,
-        name: 'auth.login'
+        name: 'auth.login',
+        meta: {
+            requiresGuest: true
+        }
     },
     {
         path: '/auth/register',
         component: RegisterPage,
-        name: 'auth.register'
+        name: 'auth.register',
+        meta: {
+            requiresGuest: true
+        }
     },
     {
         path: '/messages',
         component: Dashboard,
-        name: 'user.dashboard'
+        name: 'user.dashboard',
+        meta: {
+            requiresAuth: true
+        }
     }
 ];
