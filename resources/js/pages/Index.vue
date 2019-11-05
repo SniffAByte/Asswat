@@ -51,6 +51,7 @@ export default {
 <style lang="scss">
 .introduction {
   padding: 80px 0;
+  background: #fff;
   h1 {
     font-family: monoton;
   }

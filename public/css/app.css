@@ -11104,3 +11104,49 @@ html {
   scroll-behavior: smooth;
 }
 
+html body {
+  background: #f5f6e4;
+}
+
+html body #scroll-down {
+  position: absolute;
+  bottom: 20px;
+  color: #fff;
+  font-size: 1.5rem;
+  -webkit-animation-name: upndown;
+          animation-name: upndown;
+  -webkit-animation-duration: 2s;
+          animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  cursor: pointer;
+}
+
+@-webkit-keyframes upndown {
+  from {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateY(20px);
+            transform: translateY(20px);
+    opacity: 1;
+  }
+}
+
+@keyframes upndown {
+  from {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateY(20px);
+            transform: translateY(20px);
+    opacity: 1;
+  }
+}
+

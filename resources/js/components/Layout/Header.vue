@@ -39,25 +39,5 @@ header {
     color: #fff;
     max-width: 800px;
   }
-  #scroll-down {
-    position: absolute;
-    bottom: 20px;
-    color: #fff;
-    font-size: 1.5rem;
-    animation-name: upndown;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
-    cursor: pointer;
-    @keyframes upndown {
-      from {
-        transform: translateY(0);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(20px);
-        opacity: 1;
-      }
-    }
-  }
 }
 </style>
