@@ -12,8 +12,8 @@
               />
             </div>
             <div class="about">
-              <h3>Mahmoud Shiref</h3>
-              <a href="#">api.aswat.test/mahmoud_shirefaslkjdakshdkajsdh</a>
+              <h3>{{ user.name }}</h3>
+              <a href="#">api.aswat.test/{{ user.name }}</a>
               <div class="row">
                 <div class="col-6">
                   <button class="col-12 btn btn-primary">Settings</button>
@@ -53,10 +53,19 @@
 <script>
 import Navbar from "../../components/Layout/Navbar.vue";
 import Footer from "../../components/Layout/Footer.vue";
+
 export default {
   components: {
     Navbar,
     Footer
+  },
+  computed: {
+    user() {
+      return this.$store.state.Auth.user;
+    }
+  },
+  created() {
+    this.$store.dispatch("Auth/fetchMe");
   }
 };
 </script>

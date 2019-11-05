@@ -793,6 +793,14 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Navbar: _components_Layout_Navbar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     Footer: _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  computed: {
+    user: function user() {
+      return this.$store.state.Auth.user;
+    }
+  },
+  created: function created() {
+    this.$store.dispatch("Auth/fetchMe");
   }
 });
 
@@ -21840,7 +21848,19 @@ var render = function() {
       _c("div", { staticClass: "page-content" }, [
         _c("div", { staticClass: "container" }, [
           _c("div", { staticClass: "row" }, [
-            _vm._m(0),
+            _c("div", { staticClass: "col-lg-3 me" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "about" }, [
+                _c("h3", [_vm._v(_vm._s(_vm.user.name))]),
+                _vm._v(" "),
+                _c("a", { attrs: { href: "#" } }, [
+                  _vm._v("api.aswat.test/" + _vm._s(_vm.user.name))
+                ]),
+                _vm._v(" "),
+                _vm._m(1)
+              ])
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -21863,7 +21883,7 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(1, true)
+                  _vm._m(2, true)
                 ])
               }),
               0
@@ -21882,36 +21902,30 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-3 me" }, [
-      _c("div", { staticClass: "img" }, [
-        _c("img", {
-          staticClass: "img-fluid",
-          attrs: {
-            src:
-              "https://www.midlandsderm.com/wp-content/uploads/2019/04/Rachel-R.-Person-760x760.jpg"
-          }
-        })
+    return _c("div", { staticClass: "img" }, [
+      _c("img", {
+        staticClass: "img-fluid",
+        attrs: {
+          src:
+            "https://www.midlandsderm.com/wp-content/uploads/2019/04/Rachel-R.-Person-760x760.jpg"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c("button", { staticClass: "col-12 btn btn-primary" }, [
+          _vm._v("Settings")
+        ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "about" }, [
-        _c("h3", [_vm._v("Mahmoud Shiref")]),
-        _vm._v(" "),
-        _c("a", { attrs: { href: "#" } }, [
-          _vm._v("api.aswat.test/mahmoud_shirefaslkjdakshdkajsdh")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-6" }, [
-            _c("button", { staticClass: "col-12 btn btn-primary" }, [
-              _vm._v("Settings")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-6" }, [
-            _c("button", { staticClass: "col-12 btn btn-danger" }, [
-              _vm._v("Deactivate")
-            ])
-          ])
+      _c("div", { staticClass: "col-6" }, [
+        _c("button", { staticClass: "col-12 btn btn-danger" }, [
+          _vm._v("Deactivate")
         ])
       ])
     ])
@@ -40447,7 +40461,10 @@ var Auth = {
   state: {
     authenticated: false,
     access_token: null,
-    error: null
+    error: null,
+    user: {
+      name: ''
+    }
   },
   getters: {
     authenticated: function authenticated(state) {
@@ -40468,6 +40485,9 @@ var Auth = {
       state.authenticated = false;
       state.access_token = null;
       localStorage.removeItem('access_token');
+    },
+    setUser: function setUser(state, user) {
+      state.user = user;
     }
   },
   actions: {
@@ -40640,7 +40660,20 @@ var Auth = {
       }
 
       return refresh;
-    }()
+    }(),
+    fetchMe: function fetchMe(_ref5) {
+      var state = _ref5.state,
+          commit = _ref5.commit;
+      vue__WEBPACK_IMPORTED_MODULE_1___default.a.http.get("auth/me", {
+        headers: {
+          Authorization: 'Bearer ' + state.access_token
+        }
+      }).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        commit('setUser', response);
+      });
+    }
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (Auth);

@@ -8,7 +8,10 @@ const Auth = {
     state: {
         authenticated: false,
         access_token: null,
-        error: null
+        error: null,
+        user: {
+            name: ''
+        }
     },
     getters: {
         authenticated(state) {
@@ -29,6 +32,9 @@ const Auth = {
             state.authenticated = false;
             state.access_token = null;
             localStorage.removeItem('access_token');
+        },
+        setUser(state, user) {
+            state.user = user;
         }
     },
     actions: {
@@ -88,6 +94,15 @@ const Auth = {
                 commit('logout');
             }
             return resp;
+        },
+        fetchMe({ state, commit }) {
+            Vue.http.get(`auth/me`, {
+                headers: {
+                    Authorization: 'Bearer ' + state.access_token
+                }
+            }).then(response => response.json()).then(response => {
+                commit('setUser', response)
+            });
         }
     }
 }
