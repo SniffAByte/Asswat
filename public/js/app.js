@@ -5244,7 +5244,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "header[data-v-ccf23852] {\n  background: -webkit-gradient(linear, left top, right top, from(#248da8), to(#196579));\n  background: linear-gradient(to right, #248da8, #196579);\n  height: calc(100vh - 100px);\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  text-align: center;\n  position: relative;\n}\nheader h1[data-v-ccf23852] {\n  font-family: Monoton;\n  color: #fff;\n  max-width: 800px;\n}\nheader #scroll-down[data-v-ccf23852] {\n  position: absolute;\n  bottom: 20px;\n  color: #fff;\n  font-size: 1.5rem;\n  -webkit-animation-name: upndown-data-v-ccf23852;\n          animation-name: upndown-data-v-ccf23852;\n  -webkit-animation-duration: 2s;\n          animation-duration: 2s;\n  -webkit-animation-iteration-count: infinite;\n          animation-iteration-count: infinite;\n  cursor: pointer;\n  display: none;\n}\n@-webkit-keyframes upndown-data-v-ccf23852 {\nfrom {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0;\n}\nto {\n    -webkit-transform: translateY(20px);\n            transform: translateY(20px);\n    opacity: 1;\n}\n}\n@keyframes upndown-data-v-ccf23852 {\nfrom {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0;\n}\nto {\n    -webkit-transform: translateY(20px);\n            transform: translateY(20px);\n    opacity: 1;\n}\n}", ""]);
+exports.push([module.i, "header[data-v-ccf23852] {\n  background: -webkit-gradient(linear, left top, right top, from(#248da8), to(#196579));\n  background: linear-gradient(to right, #248da8, #196579);\n  height: calc(100vh - 100px);\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  text-align: center;\n  position: relative;\n}\nheader h1[data-v-ccf23852] {\n  font-family: Monoton;\n  color: #fff;\n  max-width: 800px;\n}\nheader #scroll-down[data-v-ccf23852] {\n  position: absolute;\n  bottom: 20px;\n  color: #fff;\n  font-size: 1.5rem;\n  -webkit-animation-name: upndown-data-v-ccf23852;\n          animation-name: upndown-data-v-ccf23852;\n  -webkit-animation-duration: 2s;\n          animation-duration: 2s;\n  -webkit-animation-iteration-count: infinite;\n          animation-iteration-count: infinite;\n  cursor: pointer;\n}\n@-webkit-keyframes upndown-data-v-ccf23852 {\nfrom {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0;\n}\nto {\n    -webkit-transform: translateY(20px);\n            transform: translateY(20px);\n    opacity: 1;\n}\n}\n@keyframes upndown-data-v-ccf23852 {\nfrom {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0;\n}\nto {\n    -webkit-transform: translateY(20px);\n            transform: translateY(20px);\n    opacity: 1;\n}\n}", ""]);
 
 // exports
 
@@ -39400,8 +39400,8 @@ Vue.mixin(_mixins_auth__WEBPACK_IMPORTED_MODULE_5__["Auth"]);
 
 var app = new Vue({
   el: '#app',
-  router: _router_router__WEBPACK_IMPORTED_MODULE_0__["router"],
-  store: _store_index__WEBPACK_IMPORTED_MODULE_4__["store"]
+  store: _store_index__WEBPACK_IMPORTED_MODULE_4__["store"],
+  router: _router_router__WEBPACK_IMPORTED_MODULE_0__["router"]
 });
 
 /***/ }),
@@ -40104,8 +40104,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./routes */ "./resources/js/router/routes.js");
-/* harmony import */ var _store_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../store/index.js */ "./resources/js/store/index.js");
+/* harmony import */ var _store_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store/index.js */ "./resources/js/store/index.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/router/routes.js");
 
 
 
@@ -40113,7 +40113,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
-  routes: _routes__WEBPACK_IMPORTED_MODULE_2__["routes"],
+  routes: _routes__WEBPACK_IMPORTED_MODULE_3__["routes"],
   scrollBehavior: function scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       return {
@@ -40132,17 +40132,25 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   }
 });
 router.beforeEach(function (to, from, next) {
-  if (to.meta.requiresAuth) {
-    return _store_index_js__WEBPACK_IMPORTED_MODULE_3__["store"].getters['Auth/authenticated'] ? next() : next({
-      name: 'auth.login'
-    });
-  } else if (to.meta.requiresGuest) {
-    return _store_index_js__WEBPACK_IMPORTED_MODULE_3__["store"].getters['Auth/authenticated'] ? next({
-      name: 'user.dashboard'
-    }) : next();
-  }
+  _store_index_js__WEBPACK_IMPORTED_MODULE_2__["store"].dispatch('Auth/refresh').then(function (authenticated) {
+    if (to.meta.requiresAuth) {
+      // If this route requires authentication
+      if (!authenticated) {
+        return next({
+          name: 'auth.login'
+        });
+      }
+    } else if (to.meta.requiresGuest) {
+      // If this route requires to be guest
+      if (authenticated) {
+        return next({
+          name: 'user.dashboard'
+        });
+      }
+    }
 
-  next();
+    return next();
+  });
 });
 
 
@@ -40233,7 +40241,9 @@ var Auth = {
   mutations: {
     auth: function auth(state, authenticated) {
       state.authenticated = true;
-      state.access_token = authenticated.access_token;
+      state.access_token = authenticated.access_token; // Store token in localstorage
+
+      localStorage.setItem('access_token', authenticated.access_token);
     },
     setError: function setError(state, error) {
       state.error = error;
@@ -40241,6 +40251,7 @@ var Auth = {
     logout: function logout(state) {
       state.authenticated = false;
       state.access_token = null;
+      localStorage.removeItem('access_token');
     }
   },
   actions: {
@@ -40259,9 +40270,7 @@ var Auth = {
                   return response.json();
                 }).then(function (authenticated) {
                   // Commit a mutation to store response in state
-                  commit('auth', authenticated); // Store token in localstorage
-
-                  localStorage.setItem('access_token', authenticated.access_token); // Redirect to user dashboard
+                  commit('auth', authenticated); // Redirect to user dashboard
 
                   _router_router__WEBPACK_IMPORTED_MODULE_2__["router"].push({
                     name: redirectTo
@@ -40299,9 +40308,7 @@ var Auth = {
                   return response.json();
                 }).then(function (authenticated) {
                   // Commit a mutation to store response in state
-                  commit('auth', authenticated); // Store token in localstorage
-
-                  localStorage.setItem('access_token', authenticated.access_token); // Redirect to user dashboard
+                  commit('auth', authenticated); // Redirect to user dashboard
 
                   _router_router__WEBPACK_IMPORTED_MODULE_2__["router"].push({
                     name: redirectTo
@@ -40361,6 +40368,62 @@ var Auth = {
       }
 
       return logout;
+    }(),
+    refresh: function () {
+      var _refresh = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref4) {
+        var commit, access_token, resp;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                commit = _ref4.commit;
+                access_token = localStorage.getItem('access_token');
+                resp = false;
+
+                if (!access_token) {
+                  _context4.next = 8;
+                  break;
+                }
+
+                _context4.next = 6;
+                return vue__WEBPACK_IMPORTED_MODULE_1___default.a.http.post("auth/refresh", {}, {
+                  headers: {
+                    Authorization: 'Bearer ' + access_token
+                  }
+                }).then(function (response) {
+                  return response.json();
+                }).then(function (authenticated) {
+                  commit('auth', authenticated);
+                  resp = true;
+                })["catch"](function (error) {
+                  commit('logout');
+                });
+
+              case 6:
+                _context4.next = 9;
+                break;
+
+              case 8:
+                commit('logout');
+
+              case 9:
+                return _context4.abrupt("return", resp);
+
+              case 10:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+
+      function refresh(_x6) {
+        return _refresh.apply(this, arguments);
+      }
+
+      return refresh;
     }()
   }
 };

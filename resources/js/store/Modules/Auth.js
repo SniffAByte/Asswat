@@ -19,6 +19,8 @@ const Auth = {
         auth(state, authenticated) {
             state.authenticated = true;
             state.access_token = authenticated.access_token
+            // Store token in localstorage
+            localStorage.setItem('access_token', authenticated.access_token);
         },
         setError(state, error) {
             state.error = error;
@@ -26,6 +28,7 @@ const Auth = {
         logout(state) {
             state.authenticated = false;
             state.access_token = null;
+            localStorage.removeItem('access_token');
         }
     },
     actions: {
@@ -34,9 +37,6 @@ const Auth = {
             await Vue.http.post(`auth/register`, payload).then(response => response.json()).then(authenticated => {
                 // Commit a mutation to store response in state
                 commit('auth', authenticated);
-
-                // Store token in localstorage
-                localStorage.setItem('access_token', authenticated.access_token);
 
                 // Redirect to user dashboard
                 router.push({ name: redirectTo });
@@ -50,9 +50,6 @@ const Auth = {
             await Vue.http.post(`auth/login`, payload).then(response => response.json()).then(authenticated => {
                 // Commit a mutation to store response in state
                 commit('auth', authenticated);
-
-                // Store token in localstorage
-                localStorage.setItem('access_token', authenticated.access_token);
 
                 // Redirect to user dashboard
                 router.push({ name: redirectTo });
@@ -72,6 +69,25 @@ const Auth = {
             }).catch(error => {
                 console.log(error);
             });
+        },
+        async refresh({ commit }) {
+            const access_token = localStorage.getItem('access_token');
+            let resp = false;
+            if (access_token) {
+                await Vue.http.post(`auth/refresh`, {}, {
+                    headers: {
+                        Authorization: 'Bearer ' + access_token
+                    }
+                }).then(response => response.json()).then(authenticated => {
+                    commit('auth', authenticated);
+                    resp = true;
+                }).catch(error => {
+                    commit('logout');
+                });
+            } else {
+                commit('logout');
+            }
+            return resp;
         }
     }
 }

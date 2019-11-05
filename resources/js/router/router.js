@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { routes } from './routes';
 import { store } from '../store/index.js';
+import { routes } from './routes';
 
 Vue.use(VueRouter);
 
@@ -27,12 +27,18 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth) {
-        return store.getters['Auth/authenticated'] ? next() : next({ name: 'auth.login' });
-    } else if (to.meta.requiresGuest) {
-        return store.getters['Auth/authenticated'] ? next({ name: 'user.dashboard' }) : next();
-    }
-    next();
+    store.dispatch('Auth/refresh').then((authenticated) => {
+        if (to.meta.requiresAuth) { // If this route requires authentication
+            if (!authenticated) {
+                return next({ name: 'auth.login' });
+            }
+        } else if (to.meta.requiresGuest) { // If this route requires to be guest
+            if (authenticated) {
+                return next({ name: 'user.dashboard' });
+            }
+        }
+        return next();
+    });
 });
 
 export { router }

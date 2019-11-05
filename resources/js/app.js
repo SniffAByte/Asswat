@@ -38,6 +38,6 @@ Vue.mixin(Auth);
  */
 const app = new Vue({
     el: '#app',
-    router,
-    store
+    store,
+    router
 });
