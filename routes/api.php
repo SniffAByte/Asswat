@@ -24,6 +24,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'messages'], function () {
     Route::get('/', 'Api\MessagesController@index');
+    Route::post('/{id}/delete', 'Api\MessagesController@destroy');
 });
 
 Route::get('/{username}', 'Api\UsersController@show');

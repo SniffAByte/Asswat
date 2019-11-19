@@ -42,7 +42,7 @@
                 aria-expanded="false"
               ></i>
               <div class="dropdown-menu" aria-labelledby="messageSettings">
-                <div class="dropdown-item">
+                <div class="dropdown-item" @click="deleteMsg(message.id)">
                   <i class="fa fa-trash fl-left"></i>
                   Delete
                 </div>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import Navbar from "../../components/Layout/Navbar.vue";
 import Footer from "../../components/Layout/Footer.vue";
 import Record from "../../components/Recorder/Record.vue";
@@ -64,7 +65,6 @@ import Record from "../../components/Recorder/Record.vue";
 export default {
   data() {
     return {
-      messages: {},
       DEFAULT_PIC: process.env.MIX_DEFAULT_PIC
     };
   },
@@ -73,26 +73,20 @@ export default {
     Footer,
     Record
   },
+  methods: {
+    ...mapActions("Message", ["deleteMsg", "fetchMessages"]),
+    ...mapActions("Auth", ["fetchMe"])
+  },
   computed: {
+    ...mapGetters("Message", ["messages"]),
     user() {
       return this.$store.state.Auth.user;
     }
   },
-  async mounted() {
-    this.$store.dispatch("Auth/fetchMe");
+  mounted() {
+    this.fetchMe();
     // Fetch Messages
-    const access_token = this.$store.state.Auth.access_token;
-    await this.$http
-      .get(`messages`, {
-        headers: {
-          Authorization: "Bearer " + access_token
-        }
-      })
-      .then(response => response.json())
-      .then(messages => {
-        this.messages = messages;
-      })
-      .catch(error => console.log(error));
+    this.fetchMessages();
   }
 };
 </script>
@@ -145,6 +139,9 @@ export default {
       }
       svg {
         color: #248ea9;
+      }
+      .dropdown-item {
+        cursor: pointer;
       }
       & > svg {
         position: absolute;

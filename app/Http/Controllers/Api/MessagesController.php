@@ -101,11 +101,12 @@ class MessagesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $message = Message::findOrFail($id);
+        $message->delete();
     }
 }

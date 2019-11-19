@@ -4,6 +4,7 @@ import { router } from '../../router/router';
 const Message = {
     namespaced: true,
     state: {
+        messages: {},
         receiver: {},
         errors: {},
         message: '',
@@ -26,6 +27,9 @@ const Message = {
         },
         url(state) {
             return state.url;
+        },
+        messages(state) {
+            return state.messages;
         }
     },
     mutations: {
@@ -57,6 +61,20 @@ const Message = {
                     return router.push({ name: "404" });
                 });
         },
+        async fetchMessages({ state, rootState }) {
+            const access_token = rootState.Auth.access_token;
+            await Vue.http
+                .get(`messages`, {
+                    headers: {
+                        Authorization: "Bearer " + access_token
+                    }
+                })
+                .then(response => response.json())
+                .then(messages => {
+                    state.messages = messages;
+                })
+                .catch(error => console.log(error));
+        },
         async SendMessage({ state }, type) {
             // Reset Errors
             state.errors = {};
@@ -79,6 +97,14 @@ const Message = {
                 alertify.notify("Your message couldn\'t be sent!.", "error");
             });
 
+        },
+        async deleteMsg({ dispatch }, id) {
+            await Vue.http.post(`messages/${id}/delete`).then(response => {
+                alertify.notify("Message has been deleted.", "success");
+                dispatch('fetchMessages');
+            }).catch(err => {
+                alertify.notify("An error happened while deleting this message.", "error");
+            });
         }
     }
 }

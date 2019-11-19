@@ -1063,16 +1063,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _components_Layout_Navbar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Layout/Navbar.vue */ "./resources/js/components/Layout/Navbar.vue");
 /* harmony import */ var _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Layout/Footer.vue */ "./resources/js/components/Layout/Footer.vue");
 /* harmony import */ var _components_Recorder_Record_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Recorder/Record.vue */ "./resources/js/components/Recorder/Record.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
 //
@@ -1132,13 +1131,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      messages: {},
       DEFAULT_PIC: "https://taskexchange.cochrane.org/assets/default-profile-bfeeabd02c3b38305b18e4c2345fd54dbbd1a0a7bf403a31f08fca4fada50449.png"
     };
   },
@@ -1147,52 +1146,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Footer: _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     Record: _components_Recorder_Record_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
-  computed: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("Message", ["deleteMsg", "fetchMessages"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("Auth", ["fetchMe"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("Message", ["messages"]), {
     user: function user() {
       return this.$store.state.Auth.user;
     }
-  },
-  mounted: function () {
-    var _mounted = _asyncToGenerator(
-    /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var _this = this;
+  }),
+  mounted: function mounted() {
+    this.fetchMe(); // Fetch Messages
 
-      var access_token;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              this.$store.dispatch("Auth/fetchMe"); // Fetch Messages
-
-              access_token = this.$store.state.Auth.access_token;
-              _context.next = 4;
-              return this.$http.get("messages", {
-                headers: {
-                  Authorization: "Bearer " + access_token
-                }
-              }).then(function (response) {
-                return response.json();
-              }).then(function (messages) {
-                _this.messages = messages;
-              })["catch"](function (error) {
-                return console.log(error);
-              });
-
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, this);
-    }));
-
-    function mounted() {
-      return _mounted.apply(this, arguments);
-    }
-
-    return mounted;
-  }()
+    this.fetchMessages();
+  }
 });
 
 /***/ }),
@@ -5963,7 +5927,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".page-content[data-v-5c5876d9] {\n  margin-top: 30px;\n}\n.page-content .me[data-v-5c5876d9] {\n  text-align: center;\n}\n.page-content .me .img[data-v-5c5876d9] {\n  max-height: 255px;\n  max-width: 255px;\n  border-radius: 50%;\n  overflow: hidden;\n  margin: auto;\n}\n.page-content .me .about[data-v-5c5876d9] {\n  margin: 10px 0 20px 0;\n  font-family: Cairo;\n}\n.page-content .me .about h3[data-v-5c5876d9] {\n  font-weight: bold;\n  text-align: center;\n  margin: 0;\n}\n.page-content .me .about a[data-v-5c5876d9] {\n  color: #28c3d4;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  display: block;\n  overflow: hidden;\n  margin-bottom: 10px;\n}\n.page-content .me .about button[data-v-5c5876d9] {\n  font-size: 0.85rem;\n}\n.page-content .messages .message[data-v-5c5876d9] {\n  background: #fff;\n  padding: 15px 40px 15px 20px;\n  border-radius: 15px;\n  text-align: justify;\n  position: relative;\n  margin-bottom: 20px;\n}\n.page-content .messages .message .track[data-v-5c5876d9] {\n  max-width: 300px;\n  border-radius: 10px;\n  border: 1px solid #eee;\n}\n.page-content .messages .message svg[data-v-5c5876d9] {\n  color: #248ea9;\n}\n.page-content .messages .message > svg[data-v-5c5876d9] {\n  position: absolute;\n  top: 17.5px;\n  right: 15px;\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".page-content[data-v-5c5876d9] {\n  margin-top: 30px;\n}\n.page-content .me[data-v-5c5876d9] {\n  text-align: center;\n}\n.page-content .me .img[data-v-5c5876d9] {\n  max-height: 255px;\n  max-width: 255px;\n  border-radius: 50%;\n  overflow: hidden;\n  margin: auto;\n}\n.page-content .me .about[data-v-5c5876d9] {\n  margin: 10px 0 20px 0;\n  font-family: Cairo;\n}\n.page-content .me .about h3[data-v-5c5876d9] {\n  font-weight: bold;\n  text-align: center;\n  margin: 0;\n}\n.page-content .me .about a[data-v-5c5876d9] {\n  color: #28c3d4;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  display: block;\n  overflow: hidden;\n  margin-bottom: 10px;\n}\n.page-content .me .about button[data-v-5c5876d9] {\n  font-size: 0.85rem;\n}\n.page-content .messages .message[data-v-5c5876d9] {\n  background: #fff;\n  padding: 15px 40px 15px 20px;\n  border-radius: 15px;\n  text-align: justify;\n  position: relative;\n  margin-bottom: 20px;\n}\n.page-content .messages .message .track[data-v-5c5876d9] {\n  max-width: 300px;\n  border-radius: 10px;\n  border: 1px solid #eee;\n}\n.page-content .messages .message svg[data-v-5c5876d9] {\n  color: #248ea9;\n}\n.page-content .messages .message .dropdown-item[data-v-5c5876d9] {\n  cursor: pointer;\n}\n.page-content .messages .message > svg[data-v-5c5876d9] {\n  position: absolute;\n  top: 17.5px;\n  right: 15px;\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -22799,7 +22763,30 @@ var render = function() {
                       }
                     }),
                     _vm._v(" "),
-                    _vm._m(1, true)
+                    _c(
+                      "div",
+                      {
+                        staticClass: "dropdown-menu",
+                        attrs: { "aria-labelledby": "messageSettings" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "dropdown-item",
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteMsg(message.id)
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "fa fa-trash fl-left" }),
+                            _vm._v("\n                Delete\n              ")
+                          ]
+                        )
+                      ]
+                    )
                   ],
                   2
                 )
@@ -22833,24 +22820,6 @@ var staticRenderFns = [
         ])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "dropdown-menu",
-        attrs: { "aria-labelledby": "messageSettings" }
-      },
-      [
-        _c("div", { staticClass: "dropdown-item" }, [
-          _c("i", { staticClass: "fa fa-trash fl-left" }),
-          _vm._v("\n                Delete\n              ")
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -42192,6 +42161,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var Message = {
   namespaced: true,
   state: {
+    messages: {},
     receiver: {},
     errors: {},
     message: '',
@@ -42214,6 +42184,9 @@ var Message = {
     },
     url: function url(state) {
       return state.url;
+    },
+    messages: function messages(state) {
+      return state.messages;
     }
   },
   mutations: {
@@ -42271,16 +42244,54 @@ var Message = {
 
       return fetchReceiver;
     }(),
-    SendMessage: function () {
-      var _SendMessage = _asyncToGenerator(
+    fetchMessages: function () {
+      var _fetchMessages = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, type) {
-        var state, fd, data;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2) {
+        var state, rootState, access_token;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                state = _ref2.state;
+                state = _ref2.state, rootState = _ref2.rootState;
+                access_token = rootState.Auth.access_token;
+                _context2.next = 4;
+                return vue__WEBPACK_IMPORTED_MODULE_1___default.a.http.get("messages", {
+                  headers: {
+                    Authorization: "Bearer " + access_token
+                  }
+                }).then(function (response) {
+                  return response.json();
+                }).then(function (messages) {
+                  state.messages = messages;
+                })["catch"](function (error) {
+                  return console.log(error);
+                });
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function fetchMessages(_x3) {
+        return _fetchMessages.apply(this, arguments);
+      }
+
+      return fetchMessages;
+    }(),
+    SendMessage: function () {
+      var _SendMessage = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref3, type) {
+        var state, fd, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                state = _ref3.state;
                 // Reset Errors
                 state.errors = {}; // Prepare Data To Send
 
@@ -42307,17 +42318,49 @@ var Message = {
 
               case 5:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2);
+        }, _callee3);
       }));
 
-      function SendMessage(_x3, _x4) {
+      function SendMessage(_x4, _x5) {
         return _SendMessage.apply(this, arguments);
       }
 
       return SendMessage;
+    }(),
+    deleteMsg: function () {
+      var _deleteMsg = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref4, id) {
+        var dispatch;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                dispatch = _ref4.dispatch;
+                _context4.next = 3;
+                return vue__WEBPACK_IMPORTED_MODULE_1___default.a.http.post("messages/".concat(id, "/delete")).then(function (response) {
+                  alertify.notify("Message has been deleted.", "success");
+                  dispatch('fetchMessages');
+                })["catch"](function (err) {
+                  alertify.notify("An error happened while deleting this message.", "error");
+                });
+
+              case 3:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+
+      function deleteMsg(_x6, _x7) {
+        return _deleteMsg.apply(this, arguments);
+      }
+
+      return deleteMsg;
     }()
   }
 };
