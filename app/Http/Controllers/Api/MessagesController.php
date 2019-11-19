@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\MessagesResource;
 
 class MessagesController extends Controller
 {
@@ -24,7 +25,8 @@ class MessagesController extends Controller
      */
     public function index()
     {
-        return response()->json(auth()->user()->messages()->latest()->get());
+        $messages = auth()->user()->messages()->latest()->get();
+        return MessagesResource::collection($messages);
     }
 
     /**

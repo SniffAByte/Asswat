@@ -48,6 +48,7 @@
           aria-labelledby="text-tab"
         >
           <textarea
+            dir="auto"
             placeholder="leave a constructive message"
             :value="message"
             @change="updateMessage"

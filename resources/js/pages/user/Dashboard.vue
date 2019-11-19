@@ -24,12 +24,15 @@
             </div>
           </div>
           <div class="col-lg-9 messages">
-            <div class="message" v-for="message in messages" :key="message.id">
-              <template v-if="!message.record">
-                <p>{{ message.message }}</p>
+            <div class="message" v-for="message in messages.data" :key="message.id">
+              <template v-if="message.message">
+                <p dir="auto">{{ message.message }}</p>
               </template>
               <template v-else>
-                <audio :src="message.record" controls></audio>
+                <Record
+                  :url="message.record"
+                  :parent="{ placeholder: 'Message #' + message.id, id: message.id }"
+                />
               </template>
               <i
                 class="fa fa-caret-down"
@@ -56,6 +59,7 @@
 <script>
 import Navbar from "../../components/Layout/Navbar.vue";
 import Footer from "../../components/Layout/Footer.vue";
+import Record from "../../components/Recorder/Record.vue";
 
 export default {
   data() {
@@ -66,7 +70,8 @@ export default {
   },
   components: {
     Navbar,
-    Footer
+    Footer,
+    Record
   },
   computed: {
     user() {
@@ -133,6 +138,11 @@ export default {
       text-align: justify;
       position: relative;
       margin-bottom: 20px;
+      .track {
+        max-width: 300px;
+        border-radius: 10px;
+        border: 1px solid #eee;
+      }
       svg {
         color: #248ea9;
       }

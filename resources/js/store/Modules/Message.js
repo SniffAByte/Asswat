@@ -61,8 +61,10 @@ const Message = {
             // Reset Errors
             state.errors = {};
             // Prepare Data To Send
-            let fd = new FormData();
-            fd.append('record', state.blob, new Date().toISOString());
+            if (type === 'record') {
+                let fd = new FormData();
+                fd.append('record', state.blob, new Date().toISOString());
+            }
             let data = (type === 'message') ? { message: state.message } : fd;
             // Send Request
             Vue.http.post(`${state.receiver.username}/send`, data).then(response => {
