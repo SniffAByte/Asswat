@@ -2,6 +2,8 @@ import Index from '../pages/Index.vue';
 import LoginPage from '../pages/auth/Login.vue';
 import RegisterPage from '../pages/auth/Register.vue';
 import Dashboard from '../pages/user/Dashboard.vue';
+import Send from '../pages/user/Send.vue';
+import PageNotFound from "../pages/errors/NotFound.vue";
 
 export const routes = [
     {
@@ -32,5 +34,15 @@ export const routes = [
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: '/404',
+        component: PageNotFound,
+        name: '404'
+    },
+    {
+        path: '/:username',
+        component: Send,
+        name: 'user.send'
     }
 ];

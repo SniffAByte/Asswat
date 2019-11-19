@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Cairo|Monoton|Righteous&display=swap" rel="stylesheet">
     <title>{{ env('APP_NAME') }}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 

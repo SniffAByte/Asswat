@@ -4,6 +4,7 @@ import VueHead from 'vue-head';
 import VueResource from 'vue-resource';
 import { store } from './store/index';
 import { Auth } from './mixins/auth';
+import AudioRecorder from 'vue-audio-recorder'
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -19,7 +20,8 @@ window.Vue = require('vue');
  */
 Vue.use(VueHead);
 Vue.use(VueResource);
-Vue.http.options.root = 'http://api.aswat.test/api';
+Vue.http.options.root = 'https://api.aswat.test/api';
+Vue.use(AudioRecorder)
 
 /**
  *  Vue Components

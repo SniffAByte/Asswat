@@ -13,7 +13,9 @@
             </div>
             <div class="about">
               <h3>{{ user.name }}</h3>
-              <a href="#">api.aswat.test/{{ user.name }}</a>
+              <router-link
+                :to="{ name: 'user.send', params: { username: user.username } }"
+              >api.aswat.test/{{ user.username }}</router-link>
               <div class="row">
                 <div class="col-6">
                   <button class="col-12 btn btn-primary">Settings</button>
