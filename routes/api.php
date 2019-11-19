@@ -20,7 +20,14 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('refresh', 'Api\Auth\LoginController@refresh');
     Route::post('register', 'Api\Auth\RegisterController@register')->name('auth.register');
 });
+
+
+Route::group(['prefix' => 'messages'], function () {
+    Route::get('/', 'Api\MessagesController@index');
+});
+
 Route::get('/{username}', 'Api\UsersController@show');
+Route::post('/{username}/send', 'Api\MessagesController@store');
 
 Route::fallback(function () {
     abort(404);

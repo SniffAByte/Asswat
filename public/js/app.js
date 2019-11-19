@@ -903,10 +903,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      type: "message",
       user: {},
       DEFAULT_PIC: "https://taskexchange.cochrane.org/assets/default-profile-bfeeabd02c3b38305b18e4c2345fd54dbbd1a0a7bf403a31f08fca4fada50449.png",
       voice: {
@@ -917,7 +927,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         playing: false,
         rec: null,
         gumStream: null
-      }
+      },
+      message: "",
+      errors: {}
     };
   },
   components: {
@@ -985,13 +997,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     resetRecording: function resetRecording() {
       this.voice.recorded = false;
+    },
+    submitMessage: function submitMessage() {
+      var _this2 = this;
+
+      var username = this.$route.params.username;
+      this.errors = {};
+
+      if (this.type === "message") {
+        this.$http.post("".concat(username, "/send"), {
+          message: this.message
+        }).then(function (response) {
+          alertify.notify("Your message has been sent.", "success");
+          _this2.message = "";
+          _this2.voice.recorded = false;
+        })["catch"](function (error) {
+          _this2.errors = error.data.errors;
+        });
+      } else if (this.type === "record") {
+        this.$http.post("".concat(username, "/send"), {
+          record: this.voice.url
+        }).then(function (response) {
+          alertify.notify("Your voice message has been sent.", "success");
+          _this2.message = "";
+          _this2.voice.recorded = false;
+        })["catch"](function (error) {
+          _this2.errors = error.data.errors;
+        });
+      }
     }
   },
   mounted: function () {
     var _mounted = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var _this2 = this;
+      var _this3 = this;
 
       var username;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -1003,9 +1043,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return this.$http.get("".concat(username)).then(function (response) {
                 return response.json();
               }).then(function (user) {
-                return _this2.user = user;
+                return _this3.user = user;
               })["catch"](function (error) {
-                return _this2.$router.push({
+                return _this3.$router.push({
                   name: "404"
                 });
               });
@@ -5637,7 +5677,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n.sendbox[data-v-3d38e253] {\n  background: #fff;\n  width: 90%;\n  max-width: 900px;\n  margin: 100px auto;\n  position: relative;\n  padding: 80px 15px 15px;\n  border-radius: 5px;\n}\n.sendbox .about[data-v-3d38e253] {\n  position: absolute;\n  top: -50px;\n  left: 50%;\n  -webkit-transform: translateX(-50%);\n          transform: translateX(-50%);\n  text-align: center;\n}\n.sendbox .about > img[data-v-3d38e253] {\n  border: 3px solid #fff;\n  max-width: 100px;\n  border-radius: 50%;\n}\n.sendbox .about h4[data-v-3d38e253] {\n  text-transform: capitalize;\n  font-size: 1rem;\n}\n.sendbox textarea[data-v-3d38e253] {\n  padding: 5px;\n  width: 100%;\n  height: 150px;\n  resize: none;\n  border: 1px solid #ddd;\n  border-radius: 5px;\n  border-top: none;\n  outline: none;\n}\n.sendbox .recorder-panel[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  padding: 30px;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253] {\n  outline: none;\n  width: 13vw;\n  max-width: 100px;\n  height: 13vw;\n  max-height: 100px;\n  border-radius: 50%;\n  background: white;\n  border: 1px solid #eee;\n  position: relative;\n  cursor: pointer;\n  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);\n  -webkit-transition: box-shadow 0.3s;\n  transition: box-shadow 0.3s;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  margin: 0 10px;\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253]:hover {\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253]:disabled {\n  cursor: no-drop;\n  opacity: 0.4;\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253]::before, .sendbox .recorder-panel .voice-button[data-v-3d38e253]::after {\n  content: \"\";\n  display: block;\n  background: tomato;\n}\n.sendbox .recorder-panel .voice-button.record[data-v-3d38e253]::before {\n  width: 5vw;\n  max-width: 25px;\n  height: 5vw;\n  max-height: 25px;\n  border-radius: 50%;\n}\n.sendbox .recorder-panel .voice-button.record[data-v-3d38e253]::after {\n  display: none;\n}\n.sendbox .recorder-panel .voice-button.resume[data-v-3d38e253]::after {\n  display: none;\n}\n.sendbox .recorder-panel .voice-button.resume[data-v-3d38e253]::before {\n  width: 0;\n  height: 0;\n  background: transparent;\n  border-left: solid 25px tomato;\n  border-bottom: solid 15px transparent;\n  border-top: solid 15px transparent;\n  margin-left: 8px;\n}\n@media screen and (max-width: 700px) {\n.sendbox .recorder-panel .voice-button.resume[data-v-3d38e253]::before {\n    border-left: solid 5vw tomato;\n    border-bottom: solid 3vw transparent;\n    border-top: solid 3vw transparent;\n}\n}\n.sendbox .recorder-panel .voice-button.pause[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.sendbox .recorder-panel .voice-button.pause[data-v-3d38e253]::before, .sendbox .recorder-panel .voice-button.pause[data-v-3d38e253]::after {\n  width: 1.6vw;\n  max-width: 10px;\n  height: 5vw;\n  max-height: 25px;\n}\n.sendbox .recorder-panel .voice-button.pause[data-v-3d38e253]::after {\n  margin-left: 5px;\n}\n.sendbox .recorder-panel .voice-button.stop[data-v-3d38e253]::after {\n  content: \"\\2713\";\n  background: none;\n  color: tomato;\n  font-size: 50px;\n}\n@media screen and (max-width: 700px) {\n.sendbox .recorder-panel .voice-button.stop[data-v-3d38e253]::after {\n    font-size: 5vw;\n}\n}\n.sendbox .tracks[data-v-3d38e253] {\n  max-width: 300px;\n  border: 1px solid #eee;\n  background: white;\n  border-radius: 10px;\n  margin: 0 auto;\n}\n.sendbox .tracks .track[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n}\n.sendbox .tracks .track audio[data-v-3d38e253] {\n  display: none;\n}\n.sendbox .tracks .track .track__actions[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.sendbox .tracks .track .track__name[data-v-3d38e253] {\n  border: 0;\n  font-family: sans-serif;\n  color: #666;\n  font-size: 14px;\n  font-weight: bold;\n}\n.sendbox .tracks .track .track__button[data-v-3d38e253] {\n  width: 30px;\n  height: 30px;\n  border: none;\n  background: none;\n  position: relative;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  cursor: pointer;\n}\n.sendbox .tracks .track .track__button[data-v-3d38e253]:disabled {\n  cursor: no-drop;\n  opacity: 0.4;\n}\n.sendbox .tracks .track .track__button[data-v-3d38e253]::before, .sendbox .tracks .track .track__button[data-v-3d38e253]::after {\n  content: \"\";\n  display: block;\n  background: tomato;\n}\n.sendbox .tracks .track .track__button--play[data-v-3d38e253]::before {\n  width: 0;\n  height: 0;\n  background: transparent;\n  border-left: solid 12px tomato;\n  border-bottom: solid 8px transparent;\n  border-top: solid 8px transparent;\n  /* place the icon on middle */\n  margin-left: 3px;\n}\n.sendbox .tracks .track .track__button--play[data-v-3d38e253]::before::after {\n  display: none;\n}\n.sendbox .tracks .track .track__button--pause[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  border-left: 1px solid #eee;\n  border-right: 1px solid #eee;\n}\n.sendbox .tracks .track .track__button--pause[data-v-3d38e253]::before, .sendbox .tracks .track .track__button--pause[data-v-3d38e253]::after {\n  width: 5px;\n  height: 15px;\n}\n.sendbox .tracks .track .track__button--pause[data-v-3d38e253]::after {\n  margin-left: 2px;\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253] {\n  border-left: 1px solid #eee;\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253]::before, .sendbox .tracks .track .track__button--remove[data-v-3d38e253]::after {\n  width: 4px;\n  height: 15px;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253]::before {\n  -webkit-transform: translate(-50%, -50%) rotate(45deg);\n          transform: translate(-50%, -50%) rotate(45deg);\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253]::after {\n  -webkit-transform: translate(-50%, -50%) rotate(-45deg);\n          transform: translate(-50%, -50%) rotate(-45deg);\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n.sendbox[data-v-3d38e253] {\n  background: #fff;\n  width: 90%;\n  max-width: 900px;\n  margin: 100px auto;\n  position: relative;\n  padding: 80px 15px 15px;\n  border-radius: 5px;\n}\n.sendbox .about[data-v-3d38e253] {\n  position: absolute;\n  top: -50px;\n  left: 50%;\n  -webkit-transform: translateX(-50%);\n          transform: translateX(-50%);\n  text-align: center;\n}\n.sendbox .about > img[data-v-3d38e253] {\n  border: 3px solid #fff;\n  max-width: 100px;\n  border-radius: 50%;\n}\n.sendbox .about h4[data-v-3d38e253] {\n  text-transform: capitalize;\n  font-size: 1rem;\n}\n.sendbox textarea[data-v-3d38e253] {\n  padding: 5px;\n  width: 100%;\n  height: 150px;\n  resize: none;\n  border: 1px solid #ddd;\n  border-radius: 5px;\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n  border-top: none;\n  outline: none;\n}\n.sendbox .recorder-panel[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  padding: 30px;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253] {\n  outline: none;\n  width: 13vw;\n  max-width: 100px;\n  height: 13vw;\n  max-height: 100px;\n  border-radius: 50%;\n  background: white;\n  border: 1px solid #eee;\n  position: relative;\n  cursor: pointer;\n  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);\n  -webkit-transition: box-shadow 0.3s;\n  transition: box-shadow 0.3s;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  margin: 0 10px;\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253]:hover {\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253]:disabled {\n  cursor: no-drop;\n  opacity: 0.4;\n}\n.sendbox .recorder-panel .voice-button[data-v-3d38e253]::before, .sendbox .recorder-panel .voice-button[data-v-3d38e253]::after {\n  content: \"\";\n  display: block;\n  background: tomato;\n}\n.sendbox .recorder-panel .voice-button.record[data-v-3d38e253]::before {\n  width: 5vw;\n  max-width: 25px;\n  height: 5vw;\n  max-height: 25px;\n  border-radius: 50%;\n}\n.sendbox .recorder-panel .voice-button.record[data-v-3d38e253]::after {\n  display: none;\n}\n.sendbox .recorder-panel .voice-button.resume[data-v-3d38e253]::after {\n  display: none;\n}\n.sendbox .recorder-panel .voice-button.resume[data-v-3d38e253]::before {\n  width: 0;\n  height: 0;\n  background: transparent;\n  border-left: solid 25px tomato;\n  border-bottom: solid 15px transparent;\n  border-top: solid 15px transparent;\n  margin-left: 8px;\n}\n@media screen and (max-width: 700px) {\n.sendbox .recorder-panel .voice-button.resume[data-v-3d38e253]::before {\n    border-left: solid 5vw tomato;\n    border-bottom: solid 3vw transparent;\n    border-top: solid 3vw transparent;\n}\n}\n.sendbox .recorder-panel .voice-button.pause[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.sendbox .recorder-panel .voice-button.pause[data-v-3d38e253]::before, .sendbox .recorder-panel .voice-button.pause[data-v-3d38e253]::after {\n  width: 1.6vw;\n  max-width: 10px;\n  height: 5vw;\n  max-height: 25px;\n}\n.sendbox .recorder-panel .voice-button.pause[data-v-3d38e253]::after {\n  margin-left: 5px;\n}\n.sendbox .recorder-panel .voice-button.stop[data-v-3d38e253]::after {\n  content: \"\\2713\";\n  background: none;\n  color: tomato;\n  font-size: 50px;\n}\n@media screen and (max-width: 700px) {\n.sendbox .recorder-panel .voice-button.stop[data-v-3d38e253]::after {\n    font-size: 5vw;\n}\n}\n.sendbox .tracks[data-v-3d38e253] {\n  max-width: 300px;\n  border: 1px solid #eee;\n  background: white;\n  border-radius: 10px;\n  margin: 0 auto;\n}\n.sendbox .tracks .track[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n}\n.sendbox .tracks .track audio[data-v-3d38e253] {\n  display: none;\n}\n.sendbox .tracks .track .track__actions[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.sendbox .tracks .track .track__name[data-v-3d38e253] {\n  border: 0;\n  font-family: sans-serif;\n  color: #666;\n  font-size: 14px;\n  font-weight: bold;\n}\n.sendbox .tracks .track .track__button[data-v-3d38e253] {\n  width: 30px;\n  height: 30px;\n  border: none;\n  background: none;\n  position: relative;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  cursor: pointer;\n}\n.sendbox .tracks .track .track__button[data-v-3d38e253]:disabled {\n  cursor: no-drop;\n  opacity: 0.4;\n}\n.sendbox .tracks .track .track__button[data-v-3d38e253]::before, .sendbox .tracks .track .track__button[data-v-3d38e253]::after {\n  content: \"\";\n  display: block;\n  background: tomato;\n}\n.sendbox .tracks .track .track__button--play[data-v-3d38e253]::before {\n  width: 0;\n  height: 0;\n  background: transparent;\n  border-left: solid 12px tomato;\n  border-bottom: solid 8px transparent;\n  border-top: solid 8px transparent;\n  /* place the icon on middle */\n  margin-left: 3px;\n}\n.sendbox .tracks .track .track__button--play[data-v-3d38e253]::before::after {\n  display: none;\n}\n.sendbox .tracks .track .track__button--pause[data-v-3d38e253] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  border-left: 1px solid #eee;\n  border-right: 1px solid #eee;\n}\n.sendbox .tracks .track .track__button--pause[data-v-3d38e253]::before, .sendbox .tracks .track .track__button--pause[data-v-3d38e253]::after {\n  width: 5px;\n  height: 15px;\n}\n.sendbox .tracks .track .track__button--pause[data-v-3d38e253]::after {\n  margin-left: 2px;\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253] {\n  border-left: 1px solid #eee;\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253]::before, .sendbox .tracks .track .track__button--remove[data-v-3d38e253]::after {\n  width: 4px;\n  height: 15px;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253]::before {\n  -webkit-transform: translate(-50%, -50%) rotate(45deg);\n          transform: translate(-50%, -50%) rotate(45deg);\n}\n.sendbox .tracks .track .track__button--remove[data-v-3d38e253]::after {\n  -webkit-transform: translate(-50%, -50%) rotate(-45deg);\n          transform: translate(-50%, -50%) rotate(-45deg);\n}", ""]);
 
 // exports
 
@@ -22305,22 +22345,113 @@ var render = function() {
           _c("h4", [_vm._v(_vm._s(_vm.user.name))])
         ]),
         _vm._v(" "),
-        _vm._m(0),
+        _c(
+          "ul",
+          {
+            staticClass: "nav nav-tabs",
+            attrs: { id: "myTab", role: "tablist" }
+          },
+          [
+            _c("li", { staticClass: "nav-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link active",
+                  attrs: {
+                    id: "text-tab",
+                    "data-toggle": "tab",
+                    href: "#textMsg",
+                    role: "tab",
+                    "aria-controls": "textMsg",
+                    "aria-selected": "true"
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.type = "message"
+                    }
+                  }
+                },
+                [_vm._v("Text Message")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "nav-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link",
+                  attrs: {
+                    id: "record-tab",
+                    "data-toggle": "tab",
+                    href: "#recordMsg",
+                    role: "tab",
+                    "aria-controls": "recordMsg",
+                    "aria-selected": "false"
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.type = "record"
+                    }
+                  }
+                },
+                [_vm._v("Voice Message")]
+              )
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c(
           "div",
           { staticClass: "tab-content", attrs: { id: "myTabContent" } },
           [
-            _vm._m(1),
+            _c(
+              "div",
+              {
+                staticClass: "tab-pane fade show active",
+                attrs: {
+                  id: "textMsg",
+                  role: "tabpanel",
+                  "aria-labelledby": "text-tab"
+                }
+              },
+              [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.message,
+                      expression: "message"
+                    }
+                  ],
+                  attrs: { placeholder: "leave a constructive message" },
+                  domProps: { value: _vm.message },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.message = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.message
+                  ? _c("a", { staticClass: "text text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.message[0]))
+                    ])
+                  : _vm._e()
+              ]
+            ),
             _vm._v(" "),
             _c(
               "div",
               {
                 staticClass: "tab-pane fade",
                 attrs: {
-                  id: "profile",
+                  id: "recordMsg",
                   role: "tabpanel",
-                  "aria-labelledby": "profile-tab"
+                  "aria-labelledby": "record-tab"
                 }
               },
               [
@@ -22390,83 +22521,29 @@ var render = function() {
                         ])
                       ]
                     )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.errors.record
+                  ? _c("a", { staticClass: "text text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.record[0]))
+                    ])
                   : _vm._e()
               ]
             )
           ]
         ),
         _vm._v(" "),
-        _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Send")])
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", on: { click: _vm.submitMessage } },
+          [_vm._v("Send")]
+        )
       ])
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "ul",
-      { staticClass: "nav nav-tabs", attrs: { id: "myTab", role: "tablist" } },
-      [
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link active",
-              attrs: {
-                id: "home-tab",
-                "data-toggle": "tab",
-                href: "#home",
-                role: "tab",
-                "aria-controls": "home",
-                "aria-selected": "true"
-              }
-            },
-            [_vm._v("Text Message")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link",
-              attrs: {
-                id: "profile-tab",
-                "data-toggle": "tab",
-                href: "#profile",
-                role: "tab",
-                "aria-controls": "profile",
-                "aria-selected": "false"
-              }
-            },
-            [_vm._v("Voice Message")]
-          )
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "tab-pane fade show active",
-        attrs: { id: "home", role: "tabpanel", "aria-labelledby": "home-tab" }
-      },
-      [
-        _c("textarea", {
-          attrs: { placeholder: "leave a constructive message" }
-        })
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

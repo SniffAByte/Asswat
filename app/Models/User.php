@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Message;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -71,5 +72,10 @@ class User extends Authenticatable implements JWTSubject
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }

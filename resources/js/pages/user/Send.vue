@@ -10,31 +10,39 @@
         <li class="nav-item">
           <a
             class="nav-link active"
-            id="home-tab"
+            id="text-tab"
             data-toggle="tab"
-            href="#home"
+            href="#textMsg"
             role="tab"
-            aria-controls="home"
+            aria-controls="textMsg"
             aria-selected="true"
+            @click="type = 'message'"
           >Text Message</a>
         </li>
         <li class="nav-item">
           <a
             class="nav-link"
-            id="profile-tab"
+            id="record-tab"
             data-toggle="tab"
-            href="#profile"
+            href="#recordMsg"
             role="tab"
-            aria-controls="profile"
+            aria-controls="recordMsg"
             aria-selected="false"
+            @click="type = 'record'"
           >Voice Message</a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <textarea placeholder="leave a constructive message"></textarea>
+        <div
+          class="tab-pane fade show active"
+          id="textMsg"
+          role="tabpanel"
+          aria-labelledby="text-tab"
+        >
+          <textarea placeholder="leave a constructive message" v-model="message"></textarea>
+          <a class="text text-danger" v-if="errors.message">{{ errors.message[0] }}</a>
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade" id="recordMsg" role="tabpanel" aria-labelledby="record-tab">
           <div class="recorder-panel">
             <button
               class="voice-button"
@@ -68,9 +76,10 @@
               <button class="track__button track__button--remove" @click="resetRecording"></button>
             </div>
           </div>
+          <a class="text text-danger" v-if="errors.record">{{ errors.record[0] }}</a>
         </div>
       </div>
-      <button class="btn btn-primary">Send</button>
+      <button class="btn btn-primary" @click="submitMessage">Send</button>
     </div>
   </div>
 </template>
@@ -81,6 +90,7 @@ import Navbar from "../../components/Layout/Navbar.vue";
 export default {
   data() {
     return {
+      type: "message",
       user: {},
       DEFAULT_PIC: process.env.MIX_DEFAULT_PIC,
       voice: {
@@ -91,7 +101,9 @@ export default {
         playing: false,
         rec: null,
         gumStream: null
-      }
+      },
+      message: "",
+      errors: {}
     };
   },
   components: {
@@ -155,6 +167,37 @@ export default {
     },
     resetRecording() {
       this.voice.recorded = false;
+    },
+    submitMessage() {
+      const username = this.$route.params.username;
+      this.errors = {};
+      if (this.type === "message") {
+        this.$http
+          .post(`${username}/send`, {
+            message: this.message
+          })
+          .then(response => {
+            alertify.notify("Your message has been sent.", "success");
+            this.message = "";
+            this.voice.recorded = false;
+          })
+          .catch(error => {
+            this.errors = error.data.errors;
+          });
+      } else if (this.type === "record") {
+        this.$http
+          .post(`${username}/send`, {
+            record: this.voice.url
+          })
+          .then(response => {
+            alertify.notify("Your voice message has been sent.", "success");
+            this.message = "";
+            this.voice.recorded = false;
+          })
+          .catch(error => {
+            this.errors = error.data.errors;
+          });
+      }
     }
   },
   async mounted() {
@@ -202,6 +245,8 @@ export default {
     resize: none;
     border: 1px solid #ddd;
     border-radius: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     border-top: none;
     outline: none;
   }
