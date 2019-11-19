@@ -33,7 +33,7 @@
         </ul>
         <ul class="navbar-nav ml-auto" v-else>
           <li class="nav-item active">
-            <router-link class="nav-link" :to="{}">Messages</router-link>
+            <router-link class="nav-link" :to="{ name: 'user.dashboard' }">Messages</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" :to="{}">Settings</router-link>

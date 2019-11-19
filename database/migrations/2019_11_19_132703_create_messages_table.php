@@ -17,7 +17,7 @@ class CreateMessagesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
             $table->text('message')->nullable();
-            $table->binary('record')->nullable();
+            $table->string('record')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

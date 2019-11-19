@@ -98,6 +98,7 @@ export default {
         paused: false,
         recorded: false,
         url: null,
+        blob: null,
         playing: false,
         rec: null,
         gumStream: null
@@ -152,6 +153,7 @@ export default {
       this.voice.rec.exportWAV(this.createDownloadLink);
     },
     createDownloadLink(blob) {
+      this.voice.blob = blob;
       var URL = window.URL || window.webkitURL;
       var url = URL.createObjectURL(blob);
       this.voice.url = url;
@@ -185,10 +187,10 @@ export default {
             this.errors = error.data.errors;
           });
       } else if (this.type === "record") {
+        var fd = new FormData();
+        fd.append("record", this.voice.blob, new Date().toISOString());
         this.$http
-          .post(`${username}/send`, {
-            record: this.voice.url
-          })
+          .post(`${username}/send`, fd)
           .then(response => {
             alertify.notify("Your voice message has been sent.", "success");
             this.message = "";

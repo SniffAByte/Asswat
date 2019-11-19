@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class MessagesController extends Controller
 {
@@ -22,7 +24,7 @@ class MessagesController extends Controller
      */
     public function index()
     {
-        return response()->json(auth()->user()->messages());
+        return response()->json(auth()->user()->messages()->latest()->get());
     }
 
     /**
@@ -38,7 +40,7 @@ class MessagesController extends Controller
         $user = User::where('username', $username)->firstOrFail();
         $this->validate($request, [
             'message' => 'required_without:record|max:1500|string',
-            'record'  => 'required_without:message'
+            'record'  => 'required_without:message|mimes:wav'
         ], [
             'message.required_without' => 'You have to write a message or record a message.',
             'record.required_without'  => 'You have to write a message or record a message.'
@@ -51,9 +53,10 @@ class MessagesController extends Controller
                 'message' => $request->message
             ];
         } else {
+            $file_name = Storage::put('public/', $request->file('record'));
             $message = [
                 'user_id' => $user->id,
-                'record' => $request->record
+                'record' => $file_name
             ];
         }
         return Message::create($message);

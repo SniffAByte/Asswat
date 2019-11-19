@@ -733,8 +733,17 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Layout_Navbar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/Layout/Navbar.vue */ "./resources/js/components/Layout/Navbar.vue");
-/* harmony import */ var _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Layout/Footer.vue */ "./resources/js/components/Layout/Footer.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Layout_Navbar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Layout/Navbar.vue */ "./resources/js/components/Layout/Navbar.vue");
+/* harmony import */ var _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Layout/Footer.vue */ "./resources/js/components/Layout/Footer.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
 //
 //
 //
@@ -792,18 +801,62 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      messages: {},
+      DEFAULT_PIC: "https://taskexchange.cochrane.org/assets/default-profile-bfeeabd02c3b38305b18e4c2345fd54dbbd1a0a7bf403a31f08fca4fada50449.png"
+    };
+  },
   components: {
-    Navbar: _components_Layout_Navbar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Footer: _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Navbar: _components_Layout_Navbar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Footer: _components_Layout_Footer_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   computed: {
     user: function user() {
       return this.$store.state.Auth.user;
     }
   },
-  created: function created() {
-    this.$store.dispatch("Auth/fetchMe");
-  }
+  mounted: function () {
+    var _mounted = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var _this = this;
+
+      var access_token;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.$store.dispatch("Auth/fetchMe"); // Fetch Messages
+
+              access_token = this.$store.state.Auth.access_token;
+              _context.next = 4;
+              return this.$http.get("messages", {
+                headers: {
+                  Authorization: "Bearer " + access_token
+                }
+              }).then(function (response) {
+                return response.json();
+              }).then(function (messages) {
+                _this.messages = messages;
+              })["catch"](function (error) {
+                return console.log(error);
+              });
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function mounted() {
+      return _mounted.apply(this, arguments);
+    }
+
+    return mounted;
+  }()
 });
 
 /***/ }),
@@ -924,6 +977,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         paused: false,
         recorded: false,
         url: null,
+        blob: null,
         playing: false,
         rec: null,
         gumStream: null
@@ -982,6 +1036,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.voice.rec.exportWAV(this.createDownloadLink);
     },
     createDownloadLink: function createDownloadLink(blob) {
+      this.voice.blob = blob;
       var URL = window.URL || window.webkitURL;
       var url = URL.createObjectURL(blob);
       this.voice.url = url;
@@ -1015,9 +1070,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           _this2.errors = error.data.errors;
         });
       } else if (this.type === "record") {
-        this.$http.post("".concat(username, "/send"), {
-          record: this.voice.url
-        }).then(function (response) {
+        var fd = new FormData();
+        fd.append("record", this.voice.blob, new Date().toISOString());
+        this.$http.post("".concat(username, "/send"), fd).then(function (response) {
           alertify.notify("Your voice message has been sent.", "success");
           _this2.message = "";
           _this2.voice.recorded = false;
@@ -21561,7 +21616,10 @@ var render = function() {
                       [
                         _c(
                           "router-link",
-                          { staticClass: "nav-link", attrs: { to: {} } },
+                          {
+                            staticClass: "nav-link",
+                            attrs: { to: { name: "user.dashboard" } }
+                          },
                           [_vm._v("Messages")]
                         )
                       ],
@@ -22196,7 +22254,12 @@ var render = function() {
         _c("div", { staticClass: "container" }, [
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-lg-3 me" }, [
-              _vm._m(0),
+              _c("div", { staticClass: "img" }, [
+                _c("img", {
+                  staticClass: "img-fluid",
+                  attrs: { src: _vm.DEFAULT_PIC }
+                })
+              ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -22217,7 +22280,7 @@ var render = function() {
                     [_vm._v("api.aswat.test/" + _vm._s(_vm.user.username))]
                   ),
                   _vm._v(" "),
-                  _vm._m(1)
+                  _vm._m(0)
                 ],
                 1
               )
@@ -22226,26 +22289,33 @@ var render = function() {
             _c(
               "div",
               { staticClass: "col-lg-9 messages" },
-              _vm._l(5, function(i) {
-                return _c("div", { key: i, staticClass: "message" }, [
-                  _c("p", [
-                    _vm._v(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("i", {
-                    staticClass: "fa fa-caret-down",
-                    attrs: {
-                      id: "messageSettings",
-                      "data-toggle": "dropdown",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(2, true)
-                ])
+              _vm._l(_vm.messages, function(message) {
+                return _c(
+                  "div",
+                  { key: message.id, staticClass: "message" },
+                  [
+                    !message.record
+                      ? [_c("p", [_vm._v(_vm._s(message.message))])]
+                      : [
+                          _c("audio", {
+                            attrs: { src: message.record, controls: "" }
+                          })
+                        ],
+                    _vm._v(" "),
+                    _c("i", {
+                      staticClass: "fa fa-caret-down",
+                      attrs: {
+                        id: "messageSettings",
+                        "data-toggle": "dropdown",
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(1, true)
+                  ],
+                  2
+                )
               }),
               0
             )
@@ -22259,20 +22329,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "img" }, [
-      _c("img", {
-        staticClass: "img-fluid",
-        attrs: {
-          src:
-            "https://www.midlandsderm.com/wp-content/uploads/2019/04/Rachel-R.-Person-760x760.jpg"
-        }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

@@ -6,10 +6,7 @@
         <div class="row">
           <div class="col-lg-3 me">
             <div class="img">
-              <img
-                src="https://www.midlandsderm.com/wp-content/uploads/2019/04/Rachel-R.-Person-760x760.jpg"
-                class="img-fluid"
-              />
+              <img :src="DEFAULT_PIC" class="img-fluid" />
             </div>
             <div class="about">
               <h3>{{ user.name }}</h3>
@@ -27,9 +24,13 @@
             </div>
           </div>
           <div class="col-lg-9 messages">
-            <div class="message" v-for="i in 5" :key="i">
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-
+            <div class="message" v-for="message in messages" :key="message.id">
+              <template v-if="!message.record">
+                <p>{{ message.message }}</p>
+              </template>
+              <template v-else>
+                <audio :src="message.record" controls></audio>
+              </template>
               <i
                 class="fa fa-caret-down"
                 id="messageSettings"
@@ -57,6 +58,12 @@ import Navbar from "../../components/Layout/Navbar.vue";
 import Footer from "../../components/Layout/Footer.vue";
 
 export default {
+  data() {
+    return {
+      messages: {},
+      DEFAULT_PIC: process.env.MIX_DEFAULT_PIC
+    };
+  },
   components: {
     Navbar,
     Footer
@@ -66,8 +73,21 @@ export default {
       return this.$store.state.Auth.user;
     }
   },
-  created() {
+  async mounted() {
     this.$store.dispatch("Auth/fetchMe");
+    // Fetch Messages
+    const access_token = this.$store.state.Auth.access_token;
+    await this.$http
+      .get(`messages`, {
+        headers: {
+          Authorization: "Bearer " + access_token
+        }
+      })
+      .then(response => response.json())
+      .then(messages => {
+        this.messages = messages;
+      })
+      .catch(error => console.log(error));
   }
 };
 </script>
