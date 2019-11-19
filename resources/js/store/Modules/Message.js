@@ -62,7 +62,7 @@ const Message = {
             state.errors = {};
             // Prepare Data To Send
             if (type === 'record') {
-                let fd = new FormData();
+                var fd = new FormData();
                 fd.append('record', state.blob, new Date().toISOString());
             }
             let data = (type === 'message') ? { message: state.message } : fd;

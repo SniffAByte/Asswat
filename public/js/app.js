@@ -511,7 +511,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -541,8 +549,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       rec: null
     };
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("Message", ["recorded"]),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])("Message", ["setRecorded", "setBlob", "setUrl"]), {
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])("Message", ["recorded"]),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])("Message", ["setRecorded", "setBlob", "setUrl"]), {
     startRecording: function startRecording() {
       var _this = this;
 
@@ -583,11 +591,160 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.rec.exportWAV(this.createDownloadLink);
     },
     createDownloadLink: function createDownloadLink(blob) {
-      this.setBlob(blob);
+      // Real Voice
+      // this.setUrl(url);
+      // this.setBlob(blob);
       var URL = window.URL || window.webkitURL;
-      var url = URL.createObjectURL(blob);
-      this.setUrl(url);
-    }
+      var url = URL.createObjectURL(blob); // Fake voice !!!!
+
+      this.changeVoice(url);
+    },
+    changeVoice: function () {
+      var _changeVoice = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(audioURL) {
+        var arrayBuffer, globalAudioBuffer, outputAudioBuffer, outputWavBlob, audioUrl;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return fetch(audioURL);
+
+              case 2:
+                _context.next = 4;
+                return _context.sent.arrayBuffer();
+
+              case 4:
+                arrayBuffer = _context.sent;
+                _context.next = 7;
+                return new AudioContext().decodeAudioData(arrayBuffer);
+
+              case 7:
+                globalAudioBuffer = _context.sent;
+                outputAudioBuffer = globalAudioBuffer;
+                _context.next = 11;
+                return this.pitchShiftTransformer(outputAudioBuffer, {
+                  shift: 0.83
+                });
+
+              case 11:
+                outputAudioBuffer = _context.sent;
+                _context.next = 14;
+                return this.audioBufferToWaveBlob(outputAudioBuffer);
+
+              case 14:
+                outputWavBlob = _context.sent;
+                audioUrl = window.URL.createObjectURL(outputWavBlob);
+                this.setUrl(audioUrl);
+                this.setBlob(outputWavBlob);
+
+              case 18:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function changeVoice(_x) {
+        return _changeVoice.apply(this, arguments);
+      }
+
+      return changeVoice;
+    }(),
+    pitchShiftTransformer: function () {
+      var _pitchShiftTransformer = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(audioBuffer, opts
+      /*negative=lower, positive=higher*/
+      ) {
+        var ctx, source, pitchChangeEffect, compressor;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                opts.shift = opts.shift === undefined ? 1 : opts.shift;
+                ctx = new OfflineAudioContext(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
+                source = ctx.createBufferSource();
+                source.buffer = audioBuffer;
+                pitchChangeEffect = new Jungle(ctx);
+                compressor = ctx.createDynamicsCompressor();
+                source.connect(pitchChangeEffect.input);
+                pitchChangeEffect.output.connect(compressor);
+                pitchChangeEffect.setPitchOffset(opts.shift);
+                compressor.connect(ctx.destination);
+                source.start(0);
+                _context2.next = 13;
+                return ctx.startRendering();
+
+              case 13:
+                return _context2.abrupt("return", _context2.sent);
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function pitchShiftTransformer(_x2, _x3) {
+        return _pitchShiftTransformer.apply(this, arguments);
+      }
+
+      return pitchShiftTransformer;
+    }(),
+    audioBufferToWaveBlob: function () {
+      var _audioBufferToWaveBlob = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(audioBuffer) {
+        var waveWorkerString;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                waveWorkerString = "self.onmessage = function(e) { var wavPCM = new WavePCM(e['data']['config']); wavPCM.record(e['data']['pcmArrays']); wavPCM.requestData(); }; var WavePCM = function(config) { this.sampleRate = config['sampleRate'] || 48000; this.bitDepth = config['bitDepth'] || 16; this.recordedBuffers = []; this.bytesPerSample = this.bitDepth / 8; }; WavePCM.prototype.record = function(buffers) { this.numberOfChannels = this.numberOfChannels || buffers.length; var bufferLength = buffers[0].length; var reducedData = new Uint8Array(bufferLength * this.numberOfChannels * this.bytesPerSample); for (var i = 0; i < bufferLength; i++) { for (var channel = 0; channel < this.numberOfChannels; channel++) { var outputIndex = (i * this.numberOfChannels + channel) * this.bytesPerSample; var sample = buffers[channel][i]; if (sample > 1) { sample = 1; } else if (sample < -1) { sample = -1; } switch (this.bytesPerSample) { case 4: sample = sample * 2147483648; reducedData[outputIndex] = sample; reducedData[outputIndex + 1] = sample >> 8; reducedData[outputIndex + 2] = sample >> 16; reducedData[outputIndex + 3] = sample >> 24; break; case 3: sample = sample * 8388608; reducedData[outputIndex] = sample; reducedData[outputIndex + 1] = sample >> 8; reducedData[outputIndex + 2] = sample >> 16; break; case 2: sample = sample * 32768; reducedData[outputIndex] = sample; reducedData[outputIndex + 1] = sample >> 8; break; case 1: reducedData[outputIndex] = (sample + 1) * 128; break; default: throw \"Only 8, 16, 24 and 32 bits per sample are supported\"; } } } this.recordedBuffers.push(reducedData); }; WavePCM.prototype.requestData = function() { var bufferLength = this.recordedBuffers[0].length; var dataLength = this.recordedBuffers.length * bufferLength; var headerLength = 44; var wav = new Uint8Array(headerLength + dataLength); var view = new DataView(wav.buffer); view.setUint32(0, 1380533830, false); view.setUint32(4, 36 + dataLength, true); view.setUint32(8, 1463899717, false); view.setUint32(12, 1718449184, false); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, this.numberOfChannels, true); view.setUint32(24, this.sampleRate, true); view.setUint32(28, this.sampleRate * this.bytesPerSample * this.numberOfChannels, true); view.setUint16(32, this.bytesPerSample * this.numberOfChannels, true); view.setUint16(34, this.bitDepth, true); view.setUint32(36, 1684108385, false); view.setUint32(40, dataLength, true); for (var i = 0; i < this.recordedBuffers.length; i++) { wav.set(this.recordedBuffers[i], i * bufferLength + headerLength); } self.postMessage(wav, [wav.buffer]); self.close(); };";
+                return _context3.abrupt("return", new Promise(function (resolve, reject) {
+                  var worker = new Worker(URL.createObjectURL(new Blob([waveWorkerString], {
+                    type: "application/javascript; charset=utf-8"
+                  })));
+
+                  worker.onmessage = function (e) {
+                    var blob = new Blob([e.data.buffer], {
+                      type: "audio/wav"
+                    });
+                    resolve(blob);
+                  };
+
+                  var pcmArrays = [];
+
+                  for (var i = 0; i < audioBuffer.numberOfChannels; i++) {
+                    pcmArrays.push(audioBuffer.getChannelData(i));
+                  }
+
+                  worker.postMessage({
+                    pcmArrays: pcmArrays,
+                    config: {
+                      sampleRate: audioBuffer.sampleRate
+                    }
+                  });
+                }));
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      function audioBufferToWaveBlob(_x4) {
+        return _audioBufferToWaveBlob.apply(this, arguments);
+      }
+
+      return audioBufferToWaveBlob;
+    }()
   })
 });
 
@@ -42118,8 +42275,7 @@ var Message = {
       var _SendMessage = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, type) {
-        var state, _fd, data;
-
+        var state, fd, data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -42129,9 +42285,8 @@ var Message = {
                 state.errors = {}; // Prepare Data To Send
 
                 if (type === 'record') {
-                  _fd = new FormData();
-
-                  _fd.append('record', state.blob, new Date().toISOString());
+                  fd = new FormData();
+                  fd.append('record', state.blob, new Date().toISOString());
                 }
 
                 data = type === 'message' ? {

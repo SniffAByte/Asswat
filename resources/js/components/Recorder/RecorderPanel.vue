@@ -62,10 +62,72 @@ export default {
       this.rec.exportWAV(this.createDownloadLink);
     },
     createDownloadLink(blob) {
-      this.setBlob(blob);
+      // Real Voice
+      // this.setUrl(url);
+      // this.setBlob(blob);
       var URL = window.URL || window.webkitURL;
       var url = URL.createObjectURL(blob);
-      this.setUrl(url);
+      // Fake voice !!!!
+      this.changeVoice(url);
+    },
+    async changeVoice(audioURL) {
+      let arrayBuffer = await (await fetch(audioURL)).arrayBuffer();
+      var globalAudioBuffer = await new AudioContext().decodeAudioData(
+        arrayBuffer
+      );
+      let outputAudioBuffer = globalAudioBuffer;
+      outputAudioBuffer = await this.pitchShiftTransformer(outputAudioBuffer, {
+        shift: 0.83
+      });
+      let outputWavBlob = await this.audioBufferToWaveBlob(outputAudioBuffer);
+      let audioUrl = window.URL.createObjectURL(outputWavBlob);
+      this.setUrl(audioUrl);
+      this.setBlob(outputWavBlob);
+    },
+    async pitchShiftTransformer(
+      audioBuffer,
+      opts /*negative=lower, positive=higher*/
+    ) {
+      opts.shift = opts.shift === undefined ? 1 : opts.shift;
+      let ctx = new OfflineAudioContext(
+        audioBuffer.numberOfChannels,
+        audioBuffer.length,
+        audioBuffer.sampleRate
+      );
+      let source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      let pitchChangeEffect = new Jungle(ctx);
+      let compressor = ctx.createDynamicsCompressor();
+      source.connect(pitchChangeEffect.input);
+      pitchChangeEffect.output.connect(compressor);
+      pitchChangeEffect.setPitchOffset(opts.shift);
+      compressor.connect(ctx.destination);
+      source.start(0);
+      return await ctx.startRendering();
+    },
+    async audioBufferToWaveBlob(audioBuffer) {
+      var waveWorkerString = `self.onmessage = function(e) { var wavPCM = new WavePCM(e['data']['config']); wavPCM.record(e['data']['pcmArrays']); wavPCM.requestData(); }; var WavePCM = function(config) { this.sampleRate = config['sampleRate'] || 48000; this.bitDepth = config['bitDepth'] || 16; this.recordedBuffers = []; this.bytesPerSample = this.bitDepth / 8; }; WavePCM.prototype.record = function(buffers) { this.numberOfChannels = this.numberOfChannels || buffers.length; var bufferLength = buffers[0].length; var reducedData = new Uint8Array(bufferLength * this.numberOfChannels * this.bytesPerSample); for (var i = 0; i < bufferLength; i++) { for (var channel = 0; channel < this.numberOfChannels; channel++) { var outputIndex = (i * this.numberOfChannels + channel) * this.bytesPerSample; var sample = buffers[channel][i]; if (sample > 1) { sample = 1; } else if (sample < -1) { sample = -1; } switch (this.bytesPerSample) { case 4: sample = sample * 2147483648; reducedData[outputIndex] = sample; reducedData[outputIndex + 1] = sample >> 8; reducedData[outputIndex + 2] = sample >> 16; reducedData[outputIndex + 3] = sample >> 24; break; case 3: sample = sample * 8388608; reducedData[outputIndex] = sample; reducedData[outputIndex + 1] = sample >> 8; reducedData[outputIndex + 2] = sample >> 16; break; case 2: sample = sample * 32768; reducedData[outputIndex] = sample; reducedData[outputIndex + 1] = sample >> 8; break; case 1: reducedData[outputIndex] = (sample + 1) * 128; break; default: throw "Only 8, 16, 24 and 32 bits per sample are supported"; } } } this.recordedBuffers.push(reducedData); }; WavePCM.prototype.requestData = function() { var bufferLength = this.recordedBuffers[0].length; var dataLength = this.recordedBuffers.length * bufferLength; var headerLength = 44; var wav = new Uint8Array(headerLength + dataLength); var view = new DataView(wav.buffer); view.setUint32(0, 1380533830, false); view.setUint32(4, 36 + dataLength, true); view.setUint32(8, 1463899717, false); view.setUint32(12, 1718449184, false); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, this.numberOfChannels, true); view.setUint32(24, this.sampleRate, true); view.setUint32(28, this.sampleRate * this.bytesPerSample * this.numberOfChannels, true); view.setUint16(32, this.bytesPerSample * this.numberOfChannels, true); view.setUint16(34, this.bitDepth, true); view.setUint32(36, 1684108385, false); view.setUint32(40, dataLength, true); for (var i = 0; i < this.recordedBuffers.length; i++) { wav.set(this.recordedBuffers[i], i * bufferLength + headerLength); } self.postMessage(wav, [wav.buffer]); self.close(); };`;
+      return new Promise(function(resolve, reject) {
+        var worker = new Worker(
+          URL.createObjectURL(
+            new Blob([waveWorkerString], {
+              type: "application/javascript; charset=utf-8"
+            })
+          )
+        );
+        worker.onmessage = function(e) {
+          var blob = new Blob([e.data.buffer], { type: "audio/wav" });
+          resolve(blob);
+        };
+        let pcmArrays = [];
+        for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
+          pcmArrays.push(audioBuffer.getChannelData(i));
+        }
+        worker.postMessage({
+          pcmArrays,
+          config: { sampleRate: audioBuffer.sampleRate }
+        });
+      });
     }
   }
 };
