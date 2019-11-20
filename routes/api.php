@@ -19,6 +19,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('logout', 'Api\Auth\LoginController@logout');
     Route::post('refresh', 'Api\Auth\LoginController@refresh');
     Route::post('register', 'Api\Auth\RegisterController@register')->name('auth.register');
+    Route::post('delete', 'Api\UsersController@destroy');
 });
 
 
@@ -26,6 +27,8 @@ Route::group(['prefix' => 'messages'], function () {
     Route::get('/', 'Api\MessagesController@index');
     Route::post('/{id}/delete', 'Api\MessagesController@destroy');
 });
+
+Route::post('/settings/update', 'Api\UsersController@update');
 
 Route::get('/{username}', 'Api\UsersController@show');
 Route::post('/{username}/send', 'Api\MessagesController@store');

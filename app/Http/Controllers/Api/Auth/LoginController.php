@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuthUsersResource;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 class LoginController extends Controller
@@ -113,7 +114,8 @@ class LoginController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = new AuthUsersResource(auth()->user());
+        return response()->json($user);
     }
 
     /**

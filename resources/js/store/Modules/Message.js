@@ -55,7 +55,7 @@ const Message = {
             await Vue.http
                 .get(`${username}`)
                 .then(response => response.json())
-                .then(user => commit('setReceiver', user))
+                .then(user => commit('setReceiver', user.data))
                 .catch(() => {
                     // Abort 404
                     return router.push({ name: "404" });

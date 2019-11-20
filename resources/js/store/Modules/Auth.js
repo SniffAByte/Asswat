@@ -16,6 +16,12 @@ const Auth = {
     getters: {
         authenticated(state) {
             return state.authenticated;
+        },
+        user(state) {
+            return state.user;
+        },
+        error(state) {
+            return state.error
         }
     },
     mutations: {
@@ -35,6 +41,9 @@ const Auth = {
         },
         setUser(state, user) {
             state.user = user;
+        },
+        clearErrors(state) {
+            state.error = null;
         }
     },
     actions: {
@@ -95,14 +104,23 @@ const Auth = {
             }
             return resp;
         },
-        fetchMe({ state, commit }) {
-            Vue.http.get(`auth/me`, {
+        async fetchMe({ state, commit }) {
+            await Vue.http.get(`auth/me`, {
                 headers: {
                     Authorization: 'Bearer ' + state.access_token
                 }
             }).then(response => response.json()).then(response => {
                 commit('setUser', response)
             });
+        },
+        async deleteAccount({ state, dispatch }) {
+            await Vue.http.post(`auth/delete`, {}, {
+                headers: {
+                    Authorization: 'Bearer ' + state.access_token
+                }
+            });
+            dispatch('logout');
+            router.push({ name: 'auth.login' });
         }
     }
 }

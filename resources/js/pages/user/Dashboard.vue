@@ -6,24 +6,37 @@
         <div class="row">
           <div class="col-lg-3 me">
             <div class="img">
-              <img :src="DEFAULT_PIC" class="img-fluid" />
+              <img :src="user.pic ? user.pic : DEFAULT_PIC" class="img-fluid" />
             </div>
             <div class="about">
               <h3>{{ user.name }}</h3>
               <router-link
                 :to="{ name: 'user.send', params: { username: user.username } }"
-              >api.aswat.test/{{ user.username }}</router-link>
+              >{{ WEB_URL + user.username }}</router-link>
               <div class="row">
                 <div class="col-6">
-                  <button class="col-12 btn btn-primary">Settings</button>
+                  <router-link :to="{ name: 'settings' }">
+                    <button class="col-12 btn btn-primary">Settings</button>
+                  </router-link>
                 </div>
                 <div class="col-6">
-                  <button class="col-12 btn btn-danger">Deactivate</button>
+                  <button class="col-12 btn btn-danger" @click="deactive">Deactivate</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-9 messages">
+            <h3
+              class="text-center alert alert-success p-3"
+              v-if="typeof messages.data === 'object' && messages.data.length === 0"
+            >
+              You have no messages yet. Share you link to start getting honest messages.
+              <br />
+              <router-link
+                class="h5"
+                :to="{ name: 'user.send', params: { username: user.username } }"
+              >{{ WEB_URL + user.username }}</router-link>
+            </h3>
             <div class="message" v-for="message in messages.data" :key="message.id">
               <template v-if="message.message">
                 <p dir="auto">{{ message.message }}</p>
@@ -65,7 +78,8 @@ import Record from "../../components/Recorder/Record.vue";
 export default {
   data() {
     return {
-      DEFAULT_PIC: process.env.MIX_DEFAULT_PIC
+      DEFAULT_PIC: process.env.MIX_DEFAULT_PIC,
+      WEB_URL: process.env.MIX_WEB_URL
     };
   },
   components: {
@@ -75,13 +89,22 @@ export default {
   },
   methods: {
     ...mapActions("Message", ["deleteMsg", "fetchMessages"]),
-    ...mapActions("Auth", ["fetchMe"])
+    ...mapActions("Auth", ["fetchMe", "deleteAccount"]),
+    deactive() {
+      alertify.confirm(
+        "DELETE ACCOUNT",
+        "Are you sure you want to delete your account? You can't restore it and all data will be deleted permenantly.",
+        () => {
+          this.deleteAccount();
+          alertify.success("YOUR ACCOUNT IS NOW DELETED");
+        },
+        function() {}
+      );
+    }
   },
   computed: {
     ...mapGetters("Message", ["messages"]),
-    user() {
-      return this.$store.state.Auth.user;
-    }
+    ...mapGetters("Auth", ["user"])
   },
   mounted() {
     this.fetchMe();
@@ -102,6 +125,9 @@ export default {
       border-radius: 50%;
       overflow: hidden;
       margin: auto;
+      img {
+        height: 255px;
+      }
     }
     .about {
       margin: 10px 0 20px 0;

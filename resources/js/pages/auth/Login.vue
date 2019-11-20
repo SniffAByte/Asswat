@@ -48,6 +48,7 @@
 </style>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   head: {
     title: {
@@ -62,11 +63,7 @@ export default {
       }
     };
   },
-  computed: {
-    error() {
-      return this.$store.state.Auth.error;
-    }
-  },
+  computed: mapGetters("Auth", ["error"]),
   methods: {
     signin() {
       this.$store.dispatch("Auth/login", this.user);

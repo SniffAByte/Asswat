@@ -59,9 +59,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // If username is already taken
+        $username = str_slug($data['name']);
+        $i = 1;
+        while (User::where('username', $username)->count()) {
+            $username = str_slug($data['name']) . '-' . $i;
+            $i++;
+        }
         $user = [
             'name' => $data['name'],
-            'username' => str_slug($data['name']),
+            'username' => $username,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ];

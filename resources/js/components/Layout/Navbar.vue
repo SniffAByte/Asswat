@@ -36,7 +36,7 @@
             <router-link class="nav-link" :to="{ name: 'user.dashboard' }">Messages</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{}">Settings</router-link>
+            <router-link class="nav-link" :to="{ name: 'settings' }">Settings</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" @click.prevent="logout" href="#">Logout</a>

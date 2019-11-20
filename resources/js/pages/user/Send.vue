@@ -120,7 +120,8 @@ export default {
     text-align: center;
     & > img {
       border: 3px solid #fff;
-      max-width: 100px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
     }
     h4 {

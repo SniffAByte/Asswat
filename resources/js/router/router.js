@@ -27,6 +27,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    // CLEAR ERRORS
+    store.commit('Auth/clearErrors');
     store.dispatch('Auth/refresh').then((authenticated) => {
         if (to.meta.requiresAuth) { // If this route requires authentication
             if (!authenticated) {

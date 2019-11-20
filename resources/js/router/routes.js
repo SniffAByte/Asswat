@@ -4,6 +4,7 @@ import RegisterPage from '../pages/auth/Register.vue';
 import Dashboard from '../pages/user/Dashboard.vue';
 import Send from '../pages/user/Send.vue';
 import PageNotFound from "../pages/errors/NotFound.vue";
+import SettingsPage from '../pages/user/Settings.vue';
 
 export const routes = [
     {
@@ -39,6 +40,14 @@ export const routes = [
         path: '/404',
         component: PageNotFound,
         name: '404'
+    },
+    {
+        path: '/settings',
+        component: SettingsPage,
+        name: 'settings',
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/:username',
